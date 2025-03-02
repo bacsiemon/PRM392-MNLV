@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">PRM392MNLV</string>
+    <string name="product_image">Product image</string>
+    <string name="decrease_quantity">Decrease quantity</string>
+    <string name="increase_quantity">Increase quantity</string>
+    <string name="cart_all">All</string>
+    <string name="cart_edit">Edit</string>
+    <string name="cart_chat">Chat</string>
 </resources>

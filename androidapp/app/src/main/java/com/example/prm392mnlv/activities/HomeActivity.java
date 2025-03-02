@@ -1,4 +1,4 @@
-package com.example.prm392mnlv.views;
+package com.example.prm392mnlv.activities;
 
 import android.os.Bundle;
 
