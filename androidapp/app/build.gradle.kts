@@ -39,6 +39,8 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation(libs.retrofit.v290)
     implementation(libs.converter.gson)
+    implementation(libs.mapstruct)
+    annotationProcessor(libs.mapstruct.processor)
     implementation(libs.recyclerview)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

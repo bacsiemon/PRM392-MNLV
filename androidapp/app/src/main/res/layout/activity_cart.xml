@@ -55,11 +55,47 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvCartItems"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/layoutSummary"
         app:layout_constraintTop_toBottomOf="@id/layoutHeader"
-        tools:listitem="@layout/card_cart_item" />
+        tools:listitem="@layout/card_cart_item"
+        tools:visibility="visible" />
+
+    <LinearLayout
+        android:id="@+id/lytError"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/layoutSummary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutHeader"
+        tools:visibility="gone">
+
+        <ImageView
+            android:id="@+id/ivErrorIcon"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/error"
+            android:scaleType="fitCenter"
+            android:src="@drawable/network_issue" />
+
+        <TextView
+            android:id="@+id/tvErrorMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            tools:text="@string/network_error" />
+    </LinearLayout>
+
 
     <androidx.cardview.widget.CardView
         android:id="@+id/layoutSummary"
@@ -123,7 +159,7 @@
                     android:layout_marginEnd="8dp"
                     android:backgroundTint="@color/coral"
                     android:gravity="center"
-                    android:text="Checkout"
+                    android:text="@string/checkout"
                     android:textColor="@color/off_white"
                     android:textSize="18sp"
                     app:cornerRadius="6dp" />

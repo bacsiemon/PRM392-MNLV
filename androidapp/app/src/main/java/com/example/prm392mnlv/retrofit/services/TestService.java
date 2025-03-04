@@ -1,6 +1,9 @@
 package com.example.prm392mnlv.retrofit.services;
 
+import com.example.prm392mnlv.dto.response.CartItemResponse;
+import com.example.prm392mnlv.dto.response.ProductResponse;
 import com.example.prm392mnlv.models.CartItem;
+import com.example.prm392mnlv.models.Product;
 
 import java.util.List;
 
@@ -11,12 +14,18 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface TestService {
-    @GET("cart-item")
-    Call<List<CartItem>> getCartItems();
+    @GET("cart-items")
+    Call<List<CartItemResponse>> getCartItems();
 
-    @GET("cart-item/{id}")
-    Call<CartItem> getCartItem(@Path("id") int id);
+    @GET("cart-items/{id}")
+    Call<CartItemResponse> getCartItem(@Path("id") int id);
 
-    @POST("cart-item/{id}")
-    Call<CartItem> createCartItem(@Path("id") int id, @Body CartItem cartItem);
+    @POST("cart-items/{id}")
+    Call<CartItemResponse> createCartItem(@Path("id") int id, @Body CartItem cartItem);
+
+    @GET("products")
+    Call<List<ProductResponse>> getProducts();
+
+    @POST("products/{id}")
+    Call<ProductResponse> createProduct(@Path("id") int id, @Body Product product);
 }

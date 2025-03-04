@@ -1,13 +1,10 @@
-package com.example.prm392mnlv.dto;
+package com.example.prm392mnlv.dto.response;
 
-import androidx.annotation.Nullable;
-
-public class CartItemDto extends DtoBase {
+public class CartItemResponse extends ResponseBase {
     private String productId;
     private double unitPrice;
     private int quantity;
 
-    @Nullable
     public String getProductId() {
         return productId;
     }

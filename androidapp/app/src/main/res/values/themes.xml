@@ -14,8 +14,8 @@
         <item name="android:textColor">@color/gray_dark</item>
         <item name="android:textColorSecondary">@color/gray</item>
 
-        <item name="android:statusBarColor">@color/mint</item>
-        <item name="android:navigationBarColor">@color/mint</item>
+        <item name="android:statusBarColor">@color/coral</item>
+        <item name="android:navigationBarColor">@color/coral_light</item>
 
         <item name="controlBackground">@drawable/bg_control</item>
     </style>

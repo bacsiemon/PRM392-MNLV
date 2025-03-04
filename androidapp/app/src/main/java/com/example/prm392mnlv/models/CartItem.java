@@ -1,33 +1,45 @@
 package com.example.prm392mnlv.models;
 
 import androidx.annotation.NonNull;
-
-import com.example.prm392mnlv.utils.ThrowHelper;
+import androidx.annotation.Nullable;
 
 import java.math.BigDecimal;
 
 public class CartItem extends ModelBase {
     private String userId;
-    private Product product;
+    private String productId;
     private BigDecimal unitPrice;
     private int quantity;
+
+    private Product product;
+    private boolean selected;
+
+    public CartItem() {}
+
+    public CartItem(String id, String userId, String productId, BigDecimal unitPrice, int quantity) {
+        setId(id);
+        setUserId(userId);
+        setProductId(productId);
+        setUnitPrice(unitPrice);
+        setQuantity(quantity);
+    }
 
     @NonNull
     public String getUserId() {
         return userId;
     }
 
-    private void setUserId(@NonNull String userId) {
+    public void setUserId(@NonNull String userId) {
         this.userId = userId;
     }
 
     @NonNull
-    public Product getProduct() {
-        return product;
+    public String getProductId() {
+        return productId;
     }
 
-    private void setProduct(@NonNull Product product) {
-        this.product = product;
+    public void setProductId(@NonNull String productId) {
+        this.productId = productId;
     }
 
     @NonNull
@@ -35,7 +47,7 @@ public class CartItem extends ModelBase {
         return unitPrice;
     }
 
-    private void setUnitPrice(@NonNull BigDecimal unitPrice) {
+    public void setUnitPrice(@NonNull BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
     }
 
@@ -47,45 +59,20 @@ public class CartItem extends ModelBase {
         this.quantity = quantity;
     }
 
-    public static class Builder extends ModelBase.Builder<CartItem, Builder> {
-
-        public Builder() {
-            super(new CartItem());
-        }
-
-        public Builder withUserId(@NonNull String userId) {
-            mModel.setUserId(userId);
-            return this;
-        }
-
-        public Builder withProduct(@NonNull Product product) {
-            mModel.setProduct(product);
-            return this;
-        }
-
-        public Builder withUnitPrice(@NonNull BigDecimal unitPrice) {
-            mModel.setUnitPrice(unitPrice);
-            return this;
-        }
-
-        public Builder withQuantity(int quantity) {
-            mModel.setQuantity(quantity);
-            return this;
-        }
-
-        @Override
-        public CartItem build() {
-            if (mModel.userId == null || mModel.userId.isBlank()) {
-                ThrowHelper.throwNullOrBlank(mModel, "userId");
-            }
-            if (mModel.product == null) {
-                ThrowHelper.throwNullOrBlank(mModel, "product");
-            }
-            if (mModel.unitPrice == null) {
-                ThrowHelper.throwNullOrBlank(mModel, "unitPrice");
-            }
-            return super.build();
-        }
+    @Nullable
+    public Product getProduct() {
+        return product;
     }
 
+    public void setProduct(@NonNull Product product) {
+        this.product = product;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
 }

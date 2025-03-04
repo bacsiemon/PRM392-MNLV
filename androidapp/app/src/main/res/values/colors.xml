@@ -21,7 +21,8 @@
     <color name="lavender">#C0BCF7</color>
     <color name="lavender_soft">#eceafd</color>
     <color name="sand">#F6C997</color>
-    <color name="sand_soft">#f6E3CB</color>
+    <color name="sand_soft">#F6E3CB</color>
+    <color name="crimson">#B02222</color>
 
     <color name="night_muted_green">#6A8D73</color>
     <color name="night_mossy_green">#4A6D5B</color>
