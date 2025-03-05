@@ -8,8 +8,8 @@ android {
 
     defaultConfig {
         applicationId = "com.example.prm392mnlv"
-        minSdk = 24
-        targetSdk = 34
+        minSdk = 25
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -37,6 +37,11 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation(libs.retrofit.v290)
+    implementation(libs.converter.gson)
+    implementation(libs.mapstruct)
+    annotationProcessor(libs.mapstruct.processor)
+    implementation(libs.recyclerview)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

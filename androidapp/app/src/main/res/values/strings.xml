@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">PRM392MNLV</string>
+    <string name="product_image">Product image</string>
+    <string name="decrease_quantity">Decrease quantity</string>
+    <string name="increase_quantity">Increase quantity</string>
+    <string name="cart_all">All</string>
+    <string name="cart_edit">Edit</string>
+    <string name="cart_chat">Chat</string>
+    <string name="error">Error</string>
+    <string name="network_error">Network connection error</string>
+    <string name="empty_cart">Nothing to see here</string>
+    <string name="out_of_stock">Out of stock</string>
+    <string name="update_failed_cart_item">Could not update item.</string>
+    <string name="delete_failed_cart_item">Could not remove item.</string>
+    <string name="checkout">Checkout</string>
 </resources>
