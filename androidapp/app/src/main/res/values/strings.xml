@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">PRM392MNLV</string>
+    <string name="LOGIN_EMAIL">Email</string>
+    <string name="LOGIN_PASSWORD">Password</string>
+    <string name="LOGIN_CONFIRM_PASSWORD">Confirm Password</string>
+    <string name="LOGIN_BUTTON">Login</string>
+    <string name="LOGIN_TO_FORGOT_PASSWORD">Forgot Password?</string>
+    <string name="LOGIN_TO_SIGN_UP">Don\'t have an account? Sign Up</string>
+    <string name="SIGN_UP_BUTTON">Sign Up</string>
+    <string name="SIGN_UP_TO_LOGIN">Have an account? Log in</string>
 </resources>
