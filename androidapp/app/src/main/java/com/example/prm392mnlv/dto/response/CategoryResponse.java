@@ -1,13 +1,9 @@
 package com.example.prm392mnlv.dto.response;
 
+import androidx.annotation.NonNull;
+
 public class CategoryResponse extends ResponseBase {
-    private String categoryName;
+    public final @NonNull String categoryName;
 
-    public String getCategoryName() {
-        return categoryName;
-    }
-
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
-    }
+    public CategoryResponse(@NonNull String categoryName) {this.categoryName = categoryName;}
 }

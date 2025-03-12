@@ -5,14 +5,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.prm392mnlv.R;
-import com.example.prm392mnlv.dto.request.RegisterRequest;
-import com.example.prm392mnlv.retrofit.repositories.AuthRepository;
+import com.example.prm392mnlv.dto.response.RegisterResponse;
+import com.example.prm392mnlv.retrofit.repositories.AuthManager;
 
 import java.util.regex.Pattern;
 
@@ -27,7 +28,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText mConfirmPassword;
 
     private TextView mStatus;
-    private AuthRepository authRepository;
+    private AuthManager authManager;
 
     private final Pattern emailPattern = Pattern.compile("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
             + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$");
@@ -48,10 +49,10 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (authRepository == null) authRepository = new AuthRepository();
+        if (authManager == null) authManager = new AuthManager();
     }
 
-    private void configureView(){
+    private void configureView() {
         mEmail = findViewById(R.id.editText_Email);
         mPassword = findViewById(R.id.editText_Password);
         mConfirmPassword = findViewById(R.id.editText_ConfirmPassword);
@@ -62,47 +63,49 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private void onRegister(){
+    private void onRegister() {
         if (!validate()) return;
 
-        RegisterRequest request = new RegisterRequest();
-        request.setEmail(mEmail.getText().toString().trim());
-        request.setPassword(mPassword.getText().toString().trim());
-        Callback<Void> callback = new Callback<Void>() {
+        String name = "TEST_NAME";
+        String phoneNumber = "0333666999";
+        String email = mEmail.getText().toString().trim();
+        String password = mPassword.getText().toString().trim();
+        Callback<RegisterResponse> callback = new Callback<>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(@NonNull Call<RegisterResponse> call, @NonNull Response<RegisterResponse> response) {
                 if (!response.isSuccessful()) {
                     mStatus.setText(response.message());
                     return;
                 }
                 finish();
             }
+
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(@NonNull Call<RegisterResponse> call, @NonNull Throwable t) {
                 mStatus.setText(t.getMessage());
             }
         };
-        authRepository.register(request, callback);
+        authManager.register(name, email, phoneNumber, password, callback);
     }
 
     //TODO
-    private boolean validate(){
-        if (mEmail.getText().toString().trim().isEmpty()){
+    private boolean validate() {
+        if (mEmail.getText().toString().trim().isEmpty()) {
             mStatus.setText(R.string.ERR_EMAIL_EMPTY);
             return false;
         }
 
-        if (!emailPattern.matcher(mEmail.getText().toString().trim()).matches()){
+        if (!emailPattern.matcher(mEmail.getText().toString().trim()).matches()) {
             mStatus.setText(R.string.ERR_EMAIL_INVALID);
             return false;
         }
 
-        if (mPassword.getText().toString().trim().isEmpty()){
+        if (mPassword.getText().toString().trim().isEmpty()) {
             mStatus.setText(R.string.ERR_PASSWORD_EMPTY);
             return false;
         }
 
-        if (!mPassword.getText().toString().trim().equals(mConfirmPassword.getText().toString().trim())){
+        if (!mPassword.getText().toString().trim().equals(mConfirmPassword.getText().toString().trim())) {
             mStatus.setText(R.string.ERR_PASSWORD_NOT_MATCH);
             return false;
         }

@@ -5,7 +5,7 @@ import androidx.annotation.Nullable;
 import com.example.prm392mnlv.dto.request.CartItemCreateRequest;
 import com.example.prm392mnlv.dto.request.CartItemUpdateRequest;
 import com.example.prm392mnlv.dto.response.CartItemResponse;
-import com.google.gson.annotations.SerializedName;
+import com.squareup.moshi.Json;
 
 import java.util.List;
 
@@ -19,29 +19,29 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface CartAndOrderService {
-    String PATH_START = "api/orderdetails/";
+    String SEGMENT = "orderdetails/";
 
-    @GET(PATH_START + "get_personal_order_detail")
+    @GET(SEGMENT + "get_personal_order_detail")
     Call<List<CartItemResponse>> getOrderDetails(@Query("orderId") @Nullable String orderId,
                                                  @Query("orderDetailStatus") @Nullable OrderDetailsStatus orderDetailsStatus,
                                                  @Query("page") int pageIndex,
                                                  @Query("pageSize") int pageSize);
 
-    @POST(PATH_START + "add_to_cart")
+    @POST(SEGMENT + "add_to_cart")
     Call<CartItemResponse> createOrderDetails(@Body CartItemCreateRequest cartItemCreateRequest);
 
-    @PUT(PATH_START + "{id}")
+    @PUT(SEGMENT + "{id}")
     Call<CartItemResponse> updateOrderDetails(@Path("id") String id, @Body CartItemUpdateRequest cartItemUpdateRequest);
 
-    @DELETE(PATH_START + "{id}")
+    @DELETE(SEGMENT + "{id}")
     Call<Void> deleteOrderDetails(@Path("id") String id);
 
     enum OrderDetailsStatus {
-        @SerializedName("InCart")
+        @Json(name = "InCart")
         InCart,
-        @SerializedName("Ordered")
+        @Json(name = "Ordered")
         Ordered,
-        @SerializedName("Cancelled")
-        Cancelled,
+        @Json(name = "Cancelled")
+        Cancelled;
     }
 }

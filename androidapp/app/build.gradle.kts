@@ -20,8 +20,7 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
     }
@@ -37,9 +36,13 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
-    implementation(libs.retrofit.v290)
-    implementation(libs.converter.gson)
+    implementation(libs.retrofit.v2110)
+    implementation(libs.converter.moshi)
+    implementation(libs.moshi.adapters)
     implementation(libs.mapstruct)
+    implementation(libs.datastore.preferences)
+    implementation(libs.datastore.preferences.rxjava3)
+    implementation(libs.rxandroid)
     annotationProcessor(libs.mapstruct.processor)
     implementation(libs.recyclerview)
     testImplementation(libs.junit)

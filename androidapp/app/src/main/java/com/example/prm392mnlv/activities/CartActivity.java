@@ -74,7 +74,7 @@ public class CartActivity
             @Override
             public void onResponse(@NonNull Call<List<CartItemResponse>> call, @NonNull Response<List<CartItemResponse>> response) {
                 if (!response.isSuccessful()) {
-                    showNetworkError();
+                    showLoadError();
                     return;
                 }
 
@@ -115,14 +115,13 @@ public class CartActivity
 
             @Override
             public void onFailure(@NonNull Call<List<CartItemResponse>> call, @NonNull Throwable t) {
-                showNetworkError();
+                showLoadError();
             }
         });
     }
 
     private void showCartItems() {
-//        mCartItemAdapter = new CartItemAdapter(mCartItems);
-        mCartItemAdapter = new CartItemAdapter(CART_ITEMS);
+        mCartItemAdapter = new CartItemAdapter(mCartItems);
         mRvCartItems.setAdapter(mCartItemAdapter);
         mRvCartItems.setVisibility(View.VISIBLE);
         mLytError.setVisibility(View.GONE);
@@ -135,7 +134,7 @@ public class CartActivity
         mTvErrorMessage.setText(R.string.empty_cart);
     }
 
-    private void showNetworkError() {
+    private void showLoadError() {
         mRvCartItems.setVisibility(View.GONE);
         mLytError.setVisibility(View.VISIBLE);
         mIvErrorIcon.setImageResource(R.drawable.network_issue);
