@@ -1,6 +1,8 @@
 package com.example.prm392mnlv.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,5 +24,15 @@ public class SplashActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        Intent intent = new Intent();
+        intent.setClass(getApplicationContext(), LoginActivity.class);
+        startActivity(intent);
+
     }
 }
