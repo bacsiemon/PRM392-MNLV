@@ -11,10 +11,10 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface ProductService {
-    String PATH_START = "api/products/";
+    String SEGMENT = "products/";
 
     //                      v-- sic --v
-    @GET(PATH_START + "getproduct & pagging")
+    @GET(SEGMENT + "getproduct & pagging")
     Call<List<ProductResponse>> getProducts(@Query("id") @Nullable String id,
                                             @Query("productname") @Nullable String productName,
                                             @Query("categoryname") @Nullable String categoryName,

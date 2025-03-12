@@ -1,22 +1,13 @@
 package com.example.prm392mnlv.dto.request;
 
+import androidx.annotation.NonNull;
+
 public class CartItemCreateRequest {
-    private String productId;
-    private int quantity;
+    public final @NonNull String productId;
+    public final int quantity;
 
-    public String getProductId() {
-        return productId;
-    }
-
-    public void setProductId(String productId) {
+    public CartItemCreateRequest(@NonNull String productId, int quantity) {
         this.productId = productId;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 }

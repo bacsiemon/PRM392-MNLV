@@ -1,19 +1,15 @@
 package com.example.prm392mnlv.dto.response;
 
+import androidx.annotation.NonNull;
+
 public class CartItemResponse extends ResponseBase {
-    private String productId;
-    private double unitPrice;
-    private int quantity;
+    public final @NonNull String productId;
+    public final double unitPrice;
+    public final int quantity;
 
-    public String getProductId() {
-        return productId;
-    }
-
-    public double getUnitPrice() {
-        return unitPrice;
-    }
-
-    public int getQuantity() {
-        return quantity;
+    public CartItemResponse(@NonNull String productId, double unitPrice, int quantity) {
+        this.productId = productId;
+        this.unitPrice = unitPrice;
+        this.quantity = quantity;
     }
 }

@@ -6,15 +6,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.prm392mnlv.R;
-import com.example.prm392mnlv.dto.request.LoginRequest;
 import com.example.prm392mnlv.dto.response.LoginResponse;
-import com.example.prm392mnlv.retrofit.repositories.AuthRepository;
+import com.example.prm392mnlv.retrofit.repositories.AuthManager;
 
 import java.util.regex.Pattern;
 
@@ -27,7 +27,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText mEmail;
     private EditText mPassword;
-    private AuthRepository authRepository;
+    private AuthManager authManager;
     private TextView mStatus;
 
     private final Pattern emailPattern = Pattern.compile("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
@@ -50,9 +50,10 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (authRepository == null) authRepository = new AuthRepository();
+        if (authManager == null) authManager = new AuthManager();
     }
-    private void configureView(){
+
+    private void configureView() {
         mEmail = findViewById(R.id.editText_Email);
         mPassword = findViewById(R.id.editText_Password);
         mStatus = findViewById(R.id.textView_Status);
@@ -63,14 +64,16 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
         });
     }
-    private void onLogin(){
+
+    private void onLogin() {
         if (!validate()) return;
 
-        LoginRequest request = new LoginRequest(mEmail.getText().toString().trim(), mPassword.getText().toString().trim());
-        Callback<LoginResponse> callback = new Callback<LoginResponse>() {
+        String email = mEmail.getText().toString().trim();
+        String password = mPassword.getText().toString().trim();
+        Callback<LoginResponse> callback = new Callback<>() {
             @Override
-            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                if (!response.isSuccessful()){
+            public void onResponse(@NonNull Call<LoginResponse> call, @NonNull Response<LoginResponse> response) {
+                if (!response.isSuccessful()) {
                     mStatus.setText(response.message());
                     return;
                 }
@@ -79,26 +82,26 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<LoginResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<LoginResponse> call, @NonNull Throwable t) {
                 mStatus.setText(t.getMessage());
             }
         };
-        authRepository.login(request, callback);
+        authManager.logIn(email, password, callback);
     }
 
     //TODO
-    private boolean validate(){
-        if (mEmail.getText().toString().trim().isEmpty()){
+    private boolean validate() {
+        if (mEmail.getText().toString().trim().isEmpty()) {
             mStatus.setText(R.string.ERR_EMAIL_EMPTY);
             return false;
         }
 
-        if (!emailPattern.matcher(mEmail.getText().toString().trim()).matches()){
+        if (!emailPattern.matcher(mEmail.getText().toString().trim()).matches()) {
             mStatus.setText(R.string.ERR_EMAIL_INVALID);
             return false;
         }
 
-        if (mPassword.getText().toString().trim().isEmpty()){
+        if (mPassword.getText().toString().trim().isEmpty()) {
             mStatus.setText(R.string.ERR_PASSWORD_EMPTY);
             return false;
         }
