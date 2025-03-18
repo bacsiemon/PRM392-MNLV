@@ -24,4 +24,27 @@
     <string name="ERR_EMAIL_INVALID">Email is invalid</string>
     <string name="ERR_PASSWORD_EMPTY">Password cannot be empty</string>
     <string name="ERR_PASSWORD_NOT_MATCH">Confirm password does not match</string>
+    <string name="shipping_address">Shipping Address</string>
+    <string name="set_shipping_address">To set shipping address page</string>
+    <string name="placeholder_product_name">PRODUCT NAME</string>
+    <string name="placeholder_category_name">CATEGORY</string>
+    <string name="shipping_method">Shipping:</string>
+    <string name="shipping_fee">Fee:</string>
+    <string name="estimated_delivery">Estimated delivery:</string>
+    <string name="subtotal">Subtotal:</string>
+    <string name="payment_method">Payment method</string>
+    <string name="cart_title">Cart</string>
+    <string name="total_product_price">Total product price</string>
+    <string name="total_shipping_fee">Total shipping fee</string>
+    <string name="grand_total">Grand total</string>
+    <string name="checkout_title">Confirm order</string>
+    <string name="order_summary_total">Total:</string>
+    <string name="place_order">Place order</string>
+    <string name="address_hint">Street address, district, city</string>
+    <string name="temp_shipping_address_title">Use another address</string>
+    <string name="confirm_address">Confirm address</string>
+    <string name="discount">Advance payment discount</string>
+    <string name="order_summary">Summary</string>
+    <string name="shipping_method_title">Choose a shipping method</string>
+    <string name="confirm">Confirm</string>
 </resources>
