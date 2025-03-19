@@ -14,36 +14,43 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PRM392MNLV"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".activities.RegisterActivity"
+            android:name=".ui.activities.ShippingMethodActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.CartActivity"
+            android:name=".ui.activities.ShippingAddressActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.SearchActivity"
+            android:name=".ui.activities.CartActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.CheckoutActivity"
+            android:name=".ui.activities.CheckoutActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.OrderDetailsActivity"
+            android:name=".ui.activities.HomeActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.HomeActivity"
+            android:name=".ui.activities.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.SplashActivity"
+            android:name=".ui.activities.OrderDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.SearchActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".activities.LoginActivity"
-            android:exported="false">
         </activity>
     </application>
 

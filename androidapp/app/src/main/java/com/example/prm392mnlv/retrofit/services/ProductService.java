@@ -2,7 +2,8 @@ package com.example.prm392mnlv.retrofit.services;
 
 import androidx.annotation.Nullable;
 
-import com.example.prm392mnlv.dto.response.ProductResponse;
+import com.example.prm392mnlv.data.dto.response.ProductResponse;
+import com.example.prm392mnlv.retrofit.json.JsonPath;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ import retrofit2.http.Query;
 public interface ProductService {
     String SEGMENT = "products/";
 
-    //                      v-- sic --v
+    @JsonPath("items")
     @GET(SEGMENT + "getproduct & pagging")
     Call<List<ProductResponse>> getProducts(@Query("id") @Nullable String id,
                                             @Query("productname") @Nullable String productName,

@@ -19,7 +19,7 @@
     <color name="coral_light">#F4BEBE</color>
     <color name="coral_translucent">#33FF7A8A</color>
     <color name="lavender">#C0BCF7</color>
-    <color name="lavender_soft">#eceafd</color>
+    <color name="lavender_soft">#ECEAFD</color>
     <color name="sand">#F6C997</color>
     <color name="sand_soft">#F6E3CB</color>
     <color name="crimson">#B02222</color>
@@ -29,4 +29,6 @@
     <color name="night_black">#121212</color>
     <color name="night_white">#E0E0E0</color>
     <color name="night_lavender">#B2A4D4</color>
+
+    <color name="cyan">#03DAC6</color>
 </resources>
