@@ -2,8 +2,8 @@ package com.example.prm392mnlv.retrofit.repositories;
 
 import androidx.annotation.Nullable;
 
-import com.example.prm392mnlv.dto.response.ProductResponse;
-import com.example.prm392mnlv.retrofit.clients.ApiClient;
+import com.example.prm392mnlv.data.dto.response.ProductResponse;
+import com.example.prm392mnlv.retrofit.client.ApiClient;
 import com.example.prm392mnlv.retrofit.services.ProductService;
 
 import java.util.List;

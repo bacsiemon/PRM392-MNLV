@@ -2,9 +2,11 @@ package com.example.prm392mnlv.retrofit.services;
 
 import androidx.annotation.Nullable;
 
-import com.example.prm392mnlv.dto.request.CartItemCreateRequest;
-import com.example.prm392mnlv.dto.request.CartItemUpdateRequest;
-import com.example.prm392mnlv.dto.response.CartItemResponse;
+import com.example.prm392mnlv.data.dto.request.CartItemCreateRequest;
+import com.example.prm392mnlv.data.dto.request.CartItemUpdateRequest;
+import com.example.prm392mnlv.data.dto.response.CartItemResponse;
+import com.example.prm392mnlv.data.dto.response.MessageResponse;
+import com.example.prm392mnlv.retrofit.json.JsonPath;
 import com.squareup.moshi.Json;
 
 import java.util.List;
@@ -21,6 +23,7 @@ import retrofit2.http.Query;
 public interface CartAndOrderService {
     String SEGMENT = "orderdetails/";
 
+    @JsonPath("data:items")
     @GET(SEGMENT + "get_personal_order_detail")
     Call<List<CartItemResponse>> getOrderDetails(@Query("orderId") @Nullable String orderId,
                                                  @Query("orderDetailStatus") @Nullable OrderDetailsStatus orderDetailsStatus,
@@ -28,13 +31,13 @@ public interface CartAndOrderService {
                                                  @Query("pageSize") int pageSize);
 
     @POST(SEGMENT + "add_to_cart")
-    Call<CartItemResponse> createOrderDetails(@Body CartItemCreateRequest cartItemCreateRequest);
+    Call<MessageResponse> createOrderDetails(@Body CartItemCreateRequest cartItemCreateRequest);
 
     @PUT(SEGMENT + "{id}")
-    Call<CartItemResponse> updateOrderDetails(@Path("id") String id, @Body CartItemUpdateRequest cartItemUpdateRequest);
+    Call<MessageResponse> updateOrderDetails(@Path("id") String id, @Body CartItemUpdateRequest cartItemUpdateRequest);
 
     @DELETE(SEGMENT + "{id}")
-    Call<Void> deleteOrderDetails(@Path("id") String id);
+    Call<MessageResponse> deleteOrderDetails(@Path("id") String id);
 
     enum OrderDetailsStatus {
         @Json(name = "InCart")

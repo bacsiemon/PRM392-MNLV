@@ -19,14 +19,16 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/tvCartTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginVertical="8dp"
                 android:layout_marginStart="12dp"
+                android:text="@string/cart_title"
+                android:textColor="@color/gray_dark"
                 android:textSize="20sp"
-                android:textStyle="bold"
-                tools:text="Cart (3)" />
+                android:textStyle="bold" />
 
             <Space
                 android:layout_width="0dp"
@@ -53,15 +55,13 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCartItems"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/layoutSummary"
         app:layout_constraintTop_toBottomOf="@id/layoutHeader"
-        tools:listitem="@layout/card_cart_item"
-        tools:visibility="visible" />
+        tools:listitem="@layout/item_cart" />
 
     <LinearLayout
         android:id="@+id/lytError"
@@ -83,7 +83,7 @@
             android:adjustViewBounds="true"
             android:contentDescription="@string/error"
             android:scaleType="fitCenter"
-            android:src="@drawable/network_issue" />
+            tools:src="@drawable/network_issue" />
 
         <TextView
             android:id="@+id/tvErrorMessage"
@@ -95,7 +95,6 @@
             android:textStyle="bold"
             tools:text="@string/network_error" />
     </LinearLayout>
-
 
     <androidx.cardview.widget.CardView
         android:id="@+id/layoutSummary"
@@ -117,23 +116,22 @@
                 android:paddingVertical="2dp">
 
                 <CheckBox
-                    android:id="@+id/cbSelectItem"
+                    android:id="@+id/cbSelectAll"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|center_vertical"
                     android:layout_marginStart="8dp"
                     android:minWidth="0dp"
-                    android:minHeight="0dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:minHeight="0dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|center_vertical"
                     android:layout_marginStart="4dp"
+                    android:fontFamily="sans-serif-medium"
                     android:text="@string/cart_all"
+                    android:textColor="@color/gray_dark"
                     android:textSize="16sp" />
 
                 <Space
@@ -142,16 +140,19 @@
                     android:layout_weight="1" />
 
                 <TextView
-                    android:id="@+id/total"
+                    android:id="@+id/tvFooterTotal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|center_vertical"
                     android:layout_marginEnd="12dp"
+                    android:textColor="@color/gray_dark"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     tools:text="1.337.000 ₫" />
 
+                <!-- WARN: ElevatedButton style causes a few warning-level exceptions during rendering -->
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnCheckout"
                     style="@style/Widget.Material3.Button.ElevatedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

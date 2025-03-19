@@ -21,4 +21,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "PRM392MNLV"
 include(":app")
- 

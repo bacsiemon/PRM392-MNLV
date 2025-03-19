@@ -17,7 +17,7 @@
         <item name="android:statusBarColor">@color/coral</item>
         <item name="android:navigationBarColor">@color/coral_light</item>
 
-        <item name="controlBackground">@drawable/bg_control</item>
+<!--        <item name="controlBackground">@drawable/bg_control</item>-->
     </style>
 
     <style name="roundedImageView">

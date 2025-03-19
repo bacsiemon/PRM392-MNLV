@@ -44,6 +44,7 @@ dependencies {
     implementation(libs.datastore.preferences.rxjava3)
     implementation(libs.rxandroid)
     implementation(libs.datastore.preferences.core.jvm)
+    implementation(libs.core)
     annotationProcessor(libs.mapstruct.processor)
     implementation(libs.recyclerview)
     testImplementation(libs.junit)
