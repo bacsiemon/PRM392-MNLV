@@ -86,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
                 mStatus.setText(t.getMessage());
             }
         };
-        authManager.logIn(email, password, callback);
+        authManager.login(email, password, callback);
     }
 
     //TODO

@@ -11,6 +11,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.prm392mnlv.R;
+import com.example.prm392mnlv.stores.TokenManager;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -24,14 +25,21 @@ public class SplashActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        TokenManager.init(getApplicationContext());
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-
         Intent intent = new Intent();
-        intent.setClass(getApplicationContext(), LoginActivity.class);
+        String token = TokenManager.INSTANCE.getToken(TokenManager.ACCESS_TOKEN);
+        if (token.isEmpty()){
+            intent.setClass(getApplicationContext(), LoginActivity.class);
+            startActivity(intent);
+            return;
+        }
+
+        intent.setClass(getApplicationContext(), HomeActivity.class);
         startActivity(intent);
 
     }

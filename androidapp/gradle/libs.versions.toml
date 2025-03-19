@@ -13,6 +13,7 @@ moshiAdapters = "1.15.1"
 recyclerview = "1.4.0"
 retrofit = "2.11.0"
 rxandroid = "3.0.2"
+datastorePreferencesCoreJvm = "1.1.3"
 
 [libraries]
 converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "retrofit" }
@@ -31,6 +32,7 @@ moshi-adapters = { module = "com.squareup.moshi:moshi-adapters", version.ref = "
 recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
 retrofit-v2110 = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 rxandroid = { module = "io.reactivex.rxjava3:rxandroid", version.ref = "rxandroid" }
+datastore-preferences-core-jvm = { group = "androidx.datastore", name = "datastore-preferences-core-jvm", version.ref = "datastorePreferencesCoreJvm" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

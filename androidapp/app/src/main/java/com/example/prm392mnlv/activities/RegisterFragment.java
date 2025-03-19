@@ -1,17 +1,17 @@
 package com.example.prm392mnlv.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.prm392mnlv.R;
 import com.example.prm392mnlv.dto.response.RegisterResponse;
@@ -23,7 +23,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RegisterActivity extends AppCompatActivity {
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link RegisterFragment#} factory method to
+ * create an instance of this fragment.
+ */
+public class RegisterFragment extends Fragment {
 
     private EditText mName;
     private EditText mEmail;
@@ -36,35 +41,36 @@ public class RegisterActivity extends AppCompatActivity {
     private final Pattern emailPattern = Pattern.compile("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
             + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$");
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_register);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-        configureView();
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_register, container, false);
     }
 
     @Override
-    protected void onStart() {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        configureView(view);
+    }
+
+    @Override
+    public void onStart() {
         super.onStart();
         if (authManager == null) authManager = new AuthManager();
     }
 
-    private void configureView() {
-        mName = findViewById(R.id.editText_Name);
-        mEmail = findViewById(R.id.editText_Email);
-        mPhoneNumber = findViewById(R.id.editText_PhoneNumber);
-        mPassword = findViewById(R.id.editText_Password);
-        mConfirmPassword = findViewById(R.id.editText_ConfirmPassword);
-        mStatus = findViewById(R.id.textView_Status);
-        findViewById(R.id.button_Register).setOnClickListener(v -> onRegister());
-        findViewById(R.id.textView_ToLogin).setOnClickListener(v -> {
-            finish();
+    private void configureView(View view) {
+        mName = view.findViewById(R.id.editText_Name);
+        mEmail = view.findViewById(R.id.editText_Email);
+        mPhoneNumber = view.findViewById(R.id.editText_PhoneNumber);
+        mPassword = view.findViewById(R.id.editText_Password);
+        mConfirmPassword = view.findViewById(R.id.editText_ConfirmPassword);
+        mStatus = view.findViewById(R.id.textView_Status);
+        view.findViewById(R.id.button_Register).setOnClickListener(v -> onRegister());
+        view.findViewById(R.id.textView_ToLogin).setOnClickListener(v -> {
+            if (getActivity() != null) {
+                getActivity().finish();
+            }
         });
     }
 
@@ -81,11 +87,14 @@ public class RegisterActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<RegisterResponse> call, @NonNull Response<RegisterResponse> response) {
                 mStatus.setText(response.message());
                 if (!response.isSuccessful()) {
-                    mStatus.setText(response.message());
                     return;
                 }
-                Toast.makeText(getApplicationContext(), R.string.REGISTER_CONFIRMATION_MAIL_SENT, Toast.LENGTH_SHORT).show();
-                toRegisterConfirmation();
+                if (getContext() != null) {
+                    Toast.makeText(getContext(), R.string.REGISTER_CONFIRMATION_MAIL_SENT, Toast.LENGTH_SHORT).show();
+                    if (getActivity() != null) {
+                        getActivity().finish();
+                    }
+                }
             }
 
             @Override
@@ -129,11 +138,5 @@ public class RegisterActivity extends AppCompatActivity {
 
         mStatus.setText("");
         return true;
-    }
-    private void toRegisterConfirmation(){
-        Intent intent = new Intent();
-        intent.setClass(this, RegisterConfirmationActivity.class);
-        intent.putExtra("Email", mEmail.getText().toString().trim());
-        startActivity(intent);
     }
 }

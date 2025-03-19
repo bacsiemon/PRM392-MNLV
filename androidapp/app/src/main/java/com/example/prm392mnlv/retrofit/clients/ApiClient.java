@@ -20,7 +20,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory;
 
 public class ApiClient {
     private static final String MOCK_URL = "https://6713c00e690bf212c75fa0c3.mockapi.io/";
-    private static final String DEV_URL = "https://10.0.2.2:7286/api/";
+    private static final String DEV_URL = "https:/14.225.253.234:4000/api/";
     private static final String PROD_URL = "";
 
     private static final Retrofit retrofit;
