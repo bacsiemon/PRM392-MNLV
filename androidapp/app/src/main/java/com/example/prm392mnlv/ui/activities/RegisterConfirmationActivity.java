@@ -1,7 +1,6 @@
-package com.example.prm392mnlv.activities;
+package com.example.prm392mnlv.ui.activities;
 
 import android.os.Bundle;
-import android.view.Window;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,7 +12,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.prm392mnlv.R;
-import com.example.prm392mnlv.dto.request.RegisterConfirmationRequest;
+import com.example.prm392mnlv.data.dto.request.RegisterConfirmationRequest;
+import com.example.prm392mnlv.data.dto.request.ResendOtpRequest;
+import com.example.prm392mnlv.data.dto.response.LoginResponse;
+import com.example.prm392mnlv.data.dto.response.MessageResponse;
 import com.example.prm392mnlv.retrofit.repositories.AuthManager;
 
 import retrofit2.Call;
@@ -22,8 +24,9 @@ import retrofit2.Response;
 
 public class RegisterConfirmationActivity extends AppCompatActivity {
 
-    private EditText otpEditText;
-    private TextView statusTextView;
+    private EditText mEmail;
+    private EditText mOtp;
+    private TextView mStatus;
 
     private AuthManager authManager;
 
@@ -42,54 +45,74 @@ public class RegisterConfirmationActivity extends AppCompatActivity {
     }
 
     private void configureView() {
-        otpEditText = findViewById(R.id.editText_Otp);
-        statusTextView = findViewById(R.id.textView_Status);
+        mEmail = findViewById(R.id.editText_Email);
+        mEmail.setText(getIntent().getStringExtra("Email"));
+        mOtp = findViewById(R.id.editText_Otp);
+        mStatus = findViewById(R.id.textView_Status);
         authManager = new AuthManager();
         findViewById(R.id.button_Register).setOnClickListener(v -> onRegisterConfirm());
         findViewById(R.id.button_ResendOtp).setOnClickListener(v -> onResendConfirmationEmail());
-
     }
 
 
     private void onRegisterConfirm(){
+        if (!validate()) return;
         RegisterConfirmationRequest request = new RegisterConfirmationRequest(
-                    otpEditText.getText().toString(),
-                    getIntent().getStringExtra("email"));
+                    mEmail.getText().toString(), mOtp.getText().toString());
 
-        Callback<Void> callback = new Callback<Void>() {
+        Callback<MessageResponse> callback = new Callback<MessageResponse>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
                 if (!response.isSuccessful()){
-                    statusTextView.setText(response.message());
+                    mStatus.setText(response.body() == null ? response.message() : response.body().message);
                     return;
                 }
+                Toast.makeText(getApplicationContext(), R.string.EMAIL_CONFIRMATION_SUCCESS, Toast.LENGTH_SHORT).show();
+                setResult(RESULT_OK);
                 finish();
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable throwable) {
-
+            public void onFailure(Call<MessageResponse> call, Throwable throwable) {
+                mStatus.setText(throwable.getMessage());
+                return;
             }
         };
         authManager.confirmEmail(request, callback);
     }
 
     private void onResendConfirmationEmail(){
-        Callback<Void> callback = new Callback<Void>() {
+        ResendOtpRequest request = new ResendOtpRequest(mEmail.getText().toString());
+
+        Callback<MessageResponse> callback = new Callback<>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
                 if (!response.isSuccessful()){
-                    statusTextView.setText(response.message());
+                    mStatus.setText(response.body() == null ? response.message() : response.body().message);
+                    System.out.println(response.toString());
                     return;
                 }
                 Toast.makeText(getApplicationContext(), R.string.REGISTER_CONFIRMATION_MAIL_SENT, Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable throwable) {
-
+            public void onFailure(Call<MessageResponse> call, Throwable throwable) {
+                mStatus.setText(throwable.getMessage());
             }
         };
-        authManager.resendConfirmationEmail(getIntent().getStringExtra("email"), callback);
+        authManager.resendConfirmationEmail(request, callback);
+    }
+
+    private boolean validate(){
+        if (mEmail.getText().toString().trim().isEmpty()){
+            mStatus.setText(R.string.ERR_EMAIL_EMPTY);
+            return false;
+        }
+        if (mOtp.getText().toString().length() != 6){
+            mStatus.setText(R.string.ERR_OTP_EMPTY);
+            return false;
+        }
+        mStatus.setText("");
+        return true;
     }
 }

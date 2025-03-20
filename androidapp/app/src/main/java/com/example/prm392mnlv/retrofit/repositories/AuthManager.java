@@ -4,10 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.prm392mnlv.data.dto.request.LoginRequest;
+import com.example.prm392mnlv.data.dto.request.RegisterConfirmationRequest;
 import com.example.prm392mnlv.data.dto.request.RegisterRequest;
+
+import com.example.prm392mnlv.data.dto.request.ResendOtpRequest;
 import com.example.prm392mnlv.data.dto.response.LoginResponse;
 import com.example.prm392mnlv.data.dto.response.MessageResponse;
 import com.example.prm392mnlv.retrofit.client.ApiClient;
+import com.example.prm392mnlv.retrofit.json.JsonPath;
 import com.example.prm392mnlv.retrofit.services.AuthService;
 
 import retrofit2.Callback;
@@ -29,11 +33,11 @@ public class AuthManager {
         mAuthService.register(registerRequest).enqueue(callback);
     }
 
-    public void confirmEmail(RegisterConfirmationRequest request, Callback<Void> callback){
+    public void confirmEmail(@NonNull RegisterConfirmationRequest request, Callback<MessageResponse> callback){
         mAuthService.confirmEmail(request).enqueue(callback);
     }
 
-    public void resendConfirmationEmail(String email, Callback<Void> callback){
-        mAuthService.resendConfirmationEmail(email).enqueue(callback);
+    public void resendConfirmationEmail(@NonNull ResendOtpRequest request, Callback<MessageResponse> callback){
+        mAuthService.resendConfirmationEmail(request).enqueue(callback);
     }
 }

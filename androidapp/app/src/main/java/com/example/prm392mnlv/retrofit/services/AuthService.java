@@ -1,8 +1,11 @@
 package com.example.prm392mnlv.retrofit.services;
 
+
 import com.example.prm392mnlv.data.dto.request.LoginRequest;
 import com.example.prm392mnlv.data.dto.request.RefreshTokenRequest;
+import com.example.prm392mnlv.data.dto.request.RegisterConfirmationRequest;
 import com.example.prm392mnlv.data.dto.request.RegisterRequest;
+import com.example.prm392mnlv.data.dto.request.ResendOtpRequest;
 import com.example.prm392mnlv.data.dto.response.LoginResponse;
 import com.example.prm392mnlv.data.dto.response.RefreshTokenResponse;
 import com.example.prm392mnlv.data.dto.response.MessageResponse;
@@ -15,7 +18,7 @@ import retrofit2.http.POST;
 
 public interface AuthService {
     String SEGMENT = "auth/";
-
+    String TOKEN_REFRESH_ENDPOINT = "/api/auth/refreshtoken";
     @JsonPath("data")
     @POST(SEGMENT + "auth_account")
     Call<LoginResponse> logIn(@Body LoginRequest loginRequest);
@@ -30,8 +33,8 @@ public interface AuthService {
     Call<RefreshTokenResponse> refreshToken(@Body String refreshToken);
 
     @PATCH(SEGMENT + "confirm_email")
-    Call<Void> confirmEmail(@Body RegisterConfirmationRequest request);
+    Call<MessageResponse> confirmEmail(@Body RegisterConfirmationRequest request);
 
     @PATCH(SEGMENT + "resend_confirmation_email")
-    Call<Void> resendConfirmationEmail(@Body String email);
+    Call<MessageResponse> resendConfirmationEmail(@Body ResendOtpRequest request);
 }

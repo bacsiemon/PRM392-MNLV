@@ -5,13 +5,37 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:screenOrientation="portrait"
     tools:context=".ui.activities.LoginActivity">
+
+    <TextView
+        android:id="@+id/textView_Header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="100dp"
+        android:text="@string/WELCOME_BACK"
+        android:textSize="30dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView_Prompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/PLEASE_LOG_IN"
+        android:textSize="18dp"
+        app:layout_constraintHorizontal_weight="24"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textView_Header" />
 
     <EditText
         android:id="@+id/editText_Email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="240dp"
+        android:layout_marginTop="350dp"
         android:ems="15"
         android:inputType="textEmailAddress"
         android:hint="@string/EMAIL"
@@ -63,12 +87,27 @@
         android:text="@string/TO_REGISTER"
         android:clickable="true"
         android:focusable="true"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginBottom="150dp"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="179dp"
         tools:layout_editor_absoluteY="572dp" />
+
+    <TextView
+        android:id="@+id/textView_ToEmailConfirmation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/TO_EMAIL_CONFIRMATION"
+        android:clickable="true"
+        android:focusable="true"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="110dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
