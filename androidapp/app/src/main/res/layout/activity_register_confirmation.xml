@@ -5,8 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:screenOrientation="portrait"
-    tools:context=".ui.activities.LoginActivity">
+    tools:context=".ui.activities.RegisterConfirmationActivity">
 
     <TextView
         android:id="@+id/textView_Header"
@@ -14,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
         android:layout_marginTop="100dp"
-        android:text="@string/WELCOME_BACK"
+        android:text="@string/CONFIRM_YOUR_EMAIL"
         android:textSize="30dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -25,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
         android:layout_marginTop="20dp"
-        android:text="@string/PLEASE_LOG_IN"
+        android:text="@string/REGISTER_ENTER_OTP"
         android:textSize="18dp"
         app:layout_constraintHorizontal_weight="24"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -35,27 +34,41 @@
         android:id="@+id/editText_Email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="350dp"
         android:ems="15"
-        android:inputType="textEmailAddress"
         android:hint="@string/EMAIL"
+
+        android:layout_marginTop="350dp"
+        android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/editText_Password"
+
+    <LinearLayout
+        android:id="@+id/linearLayout_Otp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="15"
-        android:inputType="textPassword"
-        android:hint="@string/PASSWORD"
         app:layout_constraintTop_toBottomOf="@id/editText_Email"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="207dp" />
+        >
+        <EditText
+            android:id="@+id/editText_Otp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="9"
+            android:hint="@string/OTP"
+            android:inputType="number"
+            />
+        <Button
+            android:id="@+id/button_ResendOtp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="35dp"
+            android:text="@string/RESEND"
+            />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/textView_Status"
@@ -64,50 +77,20 @@
         android:layout_marginStart="176dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="177dp"
-        tools:text="Status"
         android:textColor="@color/crimson"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_Password" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout_Otp"
+        tools:text="Status" />
 
     <Button
-        android:id="@+id/button_Login"
+        android:id="@+id/button_Register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="200dp"
-        android:text="@string/LOGIN_BUTTON"
+        android:text="@string/VERIFY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/textView_ToLogin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/TO_REGISTER"
-        android:clickable="true"
-        android:focusable="true"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginBottom="150dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="179dp"
-        tools:layout_editor_absoluteY="572dp" />
-
-    <TextView
-        android:id="@+id/textView_ToEmailConfirmation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/TO_EMAIL_CONFIRMATION"
-        android:clickable="true"
-        android:focusable="true"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginBottom="110dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

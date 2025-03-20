@@ -1,10 +1,16 @@
 package com.example.prm392mnlv.ui.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -23,15 +29,18 @@ import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
 
+    private EditText mName;
     private EditText mEmail;
+    private EditText mPhoneNumber;
     private EditText mPassword;
     private EditText mConfirmPassword;
-
     private TextView mStatus;
     private AuthManager authManager;
 
     private final Pattern emailPattern = Pattern.compile("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
             + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$");
+
+    private final Pattern passwordPattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +62,9 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void configureView() {
+        mName = findViewById(R.id.editText_Name);
         mEmail = findViewById(R.id.editText_Email);
+        mPhoneNumber = findViewById(R.id.editText_PhoneNumber);
         mPassword = findViewById(R.id.editText_Password);
         mConfirmPassword = findViewById(R.id.editText_ConfirmPassword);
         mStatus = findViewById(R.id.textView_Status);
@@ -66,18 +77,19 @@ public class RegisterActivity extends AppCompatActivity {
     private void onRegister() {
         if (!validate()) return;
 
-        String name = "TEST_NAME";
-        String phoneNumber = "0333666999";
+        String name = mName.getText().toString().trim();
+        String phoneNumber = mPhoneNumber.getText().toString().trim();
         String email = mEmail.getText().toString().trim();
         String password = mPassword.getText().toString().trim();
         Callback<MessageResponse> callback = new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<MessageResponse> call, @NonNull Response<MessageResponse> response) {
                 if (!response.isSuccessful()) {
-                    mStatus.setText(response.message());
+                    mStatus.setText(response.body() == null ? response.message() : response.body().message);
                     return;
                 }
-                finish();
+                Toast.makeText(getApplicationContext(), R.string.REGISTER_CONFIRMATION_MAIL_SENT, Toast.LENGTH_SHORT).show();
+                toRegisterConfirmation();
             }
 
             @Override
@@ -88,8 +100,12 @@ public class RegisterActivity extends AppCompatActivity {
         authManager.register(name, email, phoneNumber, password, callback);
     }
 
-    //TODO
     private boolean validate() {
+        if (mName.getText().toString().trim().isEmpty()) {
+            mStatus.setText(R.string.ERR_NAME_EMPTY);
+            return false;
+        }
+
         if (mEmail.getText().toString().trim().isEmpty()) {
             mStatus.setText(R.string.ERR_EMAIL_EMPTY);
             return false;
@@ -100,8 +116,23 @@ public class RegisterActivity extends AppCompatActivity {
             return false;
         }
 
+        if (mPhoneNumber.getText().toString().trim().isEmpty()) {
+            mStatus.setText(R.string.ERR_PHONE_NUMBER_EMPTY);
+            return false;
+        }
+
+        if (mPhoneNumber.getText().toString().length() != 10){
+            mStatus.setText(R.string.ERR_PHONE_NUMBER_INVALID);
+            return false;
+        }
+
         if (mPassword.getText().toString().trim().isEmpty()) {
             mStatus.setText(R.string.ERR_PASSWORD_EMPTY);
+            return false;
+        }
+
+        if (!passwordPattern.matcher(mPassword.getText().toString().trim()).matches()) {
+            mStatus.setText(R.string.ERR_INVALID_PASSWORD);
             return false;
         }
 
@@ -113,4 +144,23 @@ public class RegisterActivity extends AppCompatActivity {
         mStatus.setText("");
         return true;
     }
+    private void toRegisterConfirmation(){
+        Intent intent = new Intent();
+        intent.setClass(this, RegisterConfirmationActivity.class);
+        intent.putExtra("Email", mEmail.getText().toString().trim());
+        getContent.launch(intent);
+    }
+    private ActivityResultLauncher<Intent> getContent = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RegisterActivity.RESULT_OK){
+                    Intent intent1 = new Intent();
+                    intent1.putExtra("Email", mEmail.getText().toString());
+                    intent1.putExtra("Password", mPassword.getText().toString());
+                    setResult(RegisterActivity.RESULT_OK, intent1);
+                    finish();
+                }
+            }
+    );
+
+
 }
