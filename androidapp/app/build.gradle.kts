@@ -31,7 +31,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
@@ -50,4 +49,9 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    // Sử dụng Glide từ version catalog
+    implementation(libs.glide)
+    annotationProcessor(libs.glide.compiler)
 }
+

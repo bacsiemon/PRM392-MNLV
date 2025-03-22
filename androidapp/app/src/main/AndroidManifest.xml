@@ -45,6 +45,12 @@
             android:name=".ui.activities.RegisterActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.activities.ProductDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.ProductListActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activities.SearchActivity"
             android:exported="false" />
         <activity
