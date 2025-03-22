@@ -46,6 +46,9 @@
     <string name="ERR_PHONE_NUMBER_INVALID">Phone number is invalid</string>
     <string name="ERR_PASSWORD_EMPTY">Password cannot be empty</string>
     <string name="ERR_PASSWORD_NOT_MATCH">Confirm password does not match</string>
+    <string name="HOME">Home</string>
+    <string name="NOTIFICATION">Notification</string>
+    <string name="ACCOUNT">Account</string>
     <string name="shipping_address">Shipping Address</string>
     <string name="set_shipping_address">To set shipping address page</string>
     <string name="placeholder_product_name">PRODUCT NAME</string>
