@@ -22,6 +22,7 @@ import com.example.prm392mnlv.R;
 import com.example.prm392mnlv.data.dto.response.LoginResponse;
 import com.example.prm392mnlv.retrofit.repositories.AuthManager;
 import com.example.prm392mnlv.stores.TokenManager;
+import com.example.prm392mnlv.util.TokenHelper;
 
 import java.util.regex.Pattern;
 
@@ -111,6 +112,7 @@ public class LoginActivity extends AppCompatActivity {
         TokenManager.init(getBaseContext());
         TokenManager.INSTANCE.setToken(TokenManager.ACCESS_TOKEN, response.accessToken);
         TokenManager.INSTANCE.setToken(TokenManager.REFRESH_TOKEN, response.refreshToken);
+        TokenHelper.setToken(response.accessToken);
         Intent homeIntent = new Intent();
         homeIntent.setClass(this, HomeActivity.class);
         startActivity(homeIntent);
