@@ -11,9 +11,9 @@
         android:icon="@drawable/ic_cart"/>
 
     <item
-        android:id="@+id/item_notification"
-        android:title="@string/NOTIFICATION"
-        android:icon="@drawable/ic_notification"/>
+        android:id="@+id/item_map"
+        android:title="@string/MAP"
+        android:icon="@drawable/ic_map"/>
 
     <item
         android:id="@+id/item_account"

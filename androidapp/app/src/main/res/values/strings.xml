@@ -49,6 +49,7 @@
     <string name="HOME">Home</string>
     <string name="NOTIFICATION">Notification</string>
     <string name="ACCOUNT">Account</string>
+    <string name="MAP">Map</string>
     <string name="shipping_address">Shipping Address</string>
     <string name="set_shipping_address">To set shipping address page</string>
     <string name="placeholder_product_name">PRODUCT NAME</string>

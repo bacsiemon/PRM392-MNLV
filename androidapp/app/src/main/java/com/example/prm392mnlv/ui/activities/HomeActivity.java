@@ -43,8 +43,8 @@ public class HomeActivity extends AppCompatActivity {
                 Toast.makeText(HomeActivity.this, "Cart", Toast.LENGTH_SHORT).show();
             }
 
-            if (item.getItemId() == R.id.item_notification) {
-                Toast.makeText(HomeActivity.this, "Notification", Toast.LENGTH_SHORT).show();
+            if (item.getItemId() == R.id.item_map) {
+                Toast.makeText(HomeActivity.this, "map", Toast.LENGTH_SHORT).show();
             }
 
             if (item.getItemId() == R.id.item_account) {
