@@ -1,9 +1,11 @@
 package com.example.prm392mnlv.data.dto.request;
 
-public class ResendOtpRequest {
-    private String email;
+import androidx.annotation.NonNull;
 
-    public ResendOtpRequest(String email) {
+public class ResendOtpRequest {
+    public final @NonNull String email;
+
+    public ResendOtpRequest(@NonNull String email) {
         this.email = email;
     }
 }

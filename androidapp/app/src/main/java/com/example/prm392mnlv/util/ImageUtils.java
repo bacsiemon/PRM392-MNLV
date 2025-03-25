@@ -11,10 +11,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-public final class ImageHelper {
-    private static final String TAG = "ImageHelper";
+public final class ImageUtils {
+    private static final String TAG = "ImageUtils";
 
-    private ImageHelper() {}
+    private ImageUtils() {}
 
     @Nullable
     public static Drawable fetchDrawable(@NonNull Uri uri) {

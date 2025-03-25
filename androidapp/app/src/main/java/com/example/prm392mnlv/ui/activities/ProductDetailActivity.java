@@ -1,7 +1,5 @@
 package com.example.prm392mnlv.ui.activities;
 
-import static android.content.Intent.getIntent;
-
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;

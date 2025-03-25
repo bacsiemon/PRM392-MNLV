@@ -10,9 +10,8 @@ import java.util.Map;
 public final class ShippingMethods {
 
     private static final Map<Integer, ShippingMethod> SHIPPING_METHODS = new HashMap<>() {{
-        put(0, new ShippingMethod("Standard", 2, 2));
-        put(1, new ShippingMethod("Express", 3, 1));
-        put(2, new ShippingMethod("Economy", 1, 3));
+        put(1, new ShippingMethod(1, "In-store pickup", 0, 0));
+        put(2, new ShippingMethod(2, "Delivery", 1, 1));
     }};
 
     private ShippingMethods() {}

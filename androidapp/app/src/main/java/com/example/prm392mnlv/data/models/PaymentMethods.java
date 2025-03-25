@@ -11,8 +11,8 @@ import java.util.Map;
 
 public final class PaymentMethods {
     private static final Map<Integer, PaymentMethod> PAYMENT_METHODS = new HashMap<>() {{
-        put(0, new PaymentMethod("Cash on delivery", R.drawable.ic_cash));
-        put(1, new PaymentMethod("ZaloPay", R.drawable.zalo));
+        put(1, new PaymentMethod(1, "Cash on delivery", R.drawable.ic_cash));
+        put(2, new PaymentMethod(2, "ZaloPay", R.drawable.zalo));
     }};
 
     private PaymentMethods() {}

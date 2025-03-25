@@ -6,6 +6,8 @@ import org.mapstruct.Named;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.HashMap;
+import java.util.Map;
 
 @Named("MappingMethods")
 public class MappingMethods {

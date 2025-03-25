@@ -35,11 +35,8 @@ public class ProductListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_list);
 
-        // Khởi tạo DataStore nếu chưa được khởi tạo
-        TokenManager.INSTANCE.init(getApplicationContext());
-
         // Lấy token từ TokenManager
-        String token = TokenManager.INSTANCE.getToken(TokenManager.ACCESS_TOKEN);
+        String token = TokenManager.INSTANCE.getTokenBlocking(TokenManager.ACCESS_TOKEN);
         Log.d("ProductListActivity", "Token: " + token);
         // Hiển thị token (tùy chọn)
         Toast.makeText(this, "Token: " + token, Toast.LENGTH_SHORT).show();
