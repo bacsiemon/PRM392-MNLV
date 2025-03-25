@@ -20,7 +20,7 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
-public interface CartAndOrderService {
+public interface CartService {
     String SEGMENT = "orderdetails/";
 
     @JsonPath("data:items")

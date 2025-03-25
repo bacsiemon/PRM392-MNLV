@@ -36,6 +36,7 @@
                 android:layout_weight="1" />
 
             <ImageView
+                android:id="@+id/ivEdit"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_gravity="end|center_vertical"
@@ -45,6 +46,7 @@
                 android:src="@drawable/ic_edit" />
 
             <ImageView
+                android:id="@+id/ivChat"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_gravity="end|center_vertical"
@@ -59,17 +61,17 @@
         android:id="@+id/rvCartItems"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/layoutSummary"
+        app:layout_constraintBottom_toTopOf="@id/layoutFooter"
         app:layout_constraintTop_toBottomOf="@id/layoutHeader"
         tools:listitem="@layout/item_cart" />
 
     <LinearLayout
-        android:id="@+id/lytError"
+        android:id="@+id/layoutError"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/layoutSummary"
+        app:layout_constraintBottom_toTopOf="@id/layoutFooter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layoutHeader"
@@ -97,7 +99,7 @@
     </LinearLayout>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/layoutSummary"
+        android:id="@+id/layoutFooter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardElevation="6dp"
@@ -140,7 +142,7 @@
                     android:layout_weight="1" />
 
                 <TextView
-                    android:id="@+id/tvFooterTotal"
+                    android:id="@+id/tvTotalFooter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|center_vertical"
@@ -148,7 +150,8 @@
                     android:textColor="@color/gray_dark"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    tools:text="1.337.000 ₫" />
+                    tools:text="1.337.000 ₫"
+                    tools:visibility="gone" />
 
                 <!-- WARN: ElevatedButton style causes a few warning-level exceptions during rendering -->
                 <com.google.android.material.button.MaterialButton
@@ -158,12 +161,30 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|center_vertical"
                     android:layout_marginEnd="8dp"
-                    android:backgroundTint="@color/coral"
+                    android:backgroundTint="@color/mint"
                     android:gravity="center"
                     android:text="@string/checkout"
                     android:textColor="@color/off_white"
                     android:textSize="18sp"
-                    app:cornerRadius="6dp" />
+                    app:cornerRadius="6dp"
+                    tools:visibility="gone" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnDelete"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginEnd="8dp"
+                    android:gravity="center"
+                    android:text="@string/delete"
+                    android:textColor="@color/coral"
+                    android:textSize="18sp"
+                    android:visibility="gone"
+                    app:cornerRadius="6dp"
+                    app:rippleColor="@color/coral_translucent"
+                    app:strokeColor="@color/coral"
+                    tools:visibility="visible" />
             </LinearLayout>
 
             <TextView

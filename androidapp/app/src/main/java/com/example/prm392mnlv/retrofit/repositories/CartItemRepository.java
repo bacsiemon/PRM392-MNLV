@@ -9,19 +9,19 @@ import com.example.prm392mnlv.data.dto.response.MessageResponse;
 import com.example.prm392mnlv.data.mappings.CartItemMapper;
 import com.example.prm392mnlv.data.models.CartItem;
 import com.example.prm392mnlv.retrofit.client.ApiClient;
-import com.example.prm392mnlv.retrofit.services.CartAndOrderService;
+import com.example.prm392mnlv.retrofit.services.CartService;
 
 import java.util.List;
 
 import retrofit2.Callback;
 
 public class CartItemRepository {
-    private static final CartAndOrderService.OrderDetailsStatus IN_CART = CartAndOrderService.OrderDetailsStatus.InCart;
+    private static final CartService.OrderDetailsStatus IN_CART = CartService.OrderDetailsStatus.InCart;
 
-    private final CartAndOrderService mCartService;
+    private final CartService mCartService;
 
     public CartItemRepository() {
-        mCartService = ApiClient.getClient().create(CartAndOrderService.class);
+        mCartService = ApiClient.getClient().create(CartService.class);
     }
 
     public void getCartItems(Callback<List<CartItemResponse>> callback) {

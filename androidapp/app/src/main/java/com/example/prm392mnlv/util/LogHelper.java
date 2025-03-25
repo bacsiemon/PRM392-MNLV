@@ -16,9 +16,9 @@ public final class LogHelper {
     public static void logErrorResponse(String tag, @NonNull Response<?> response) {
         try (ResponseBody body = response.errorBody()) {
             assert body != null;
-            Log.e(tag, "onResponse error: " + body.string());
+            Log.e(tag, "onResponse error: " + response.message() + "\n" + body.string());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            Log.e(tag, "onResponse error: ", e);
         }
     }
 

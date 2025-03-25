@@ -2,7 +2,7 @@ package com.example.prm392mnlv.ui.activities;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.icu.text.DateFormat;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
@@ -15,15 +15,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.prm392mnlv.R;
 import com.example.prm392mnlv.data.models.ShippingMethod;
-import com.example.prm392mnlv.util.TextHelper;
+import com.example.prm392mnlv.util.TextUtils;
 
+import java.math.BigDecimal;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class ShippingMethodActivity extends AppCompatActivity {
 
-    public static final String SHIPPING_METHODS_KEY = "ShippingMethods";
+    public static final String SELECTED_METHOD_ID_KEY = "selectedMethod";
+    public static final String SHIPPING_METHODS_KEY = "shippingMethods";
     public static final String RESULT_KEY = "SelectedId";
 
     private RadioGroup mRgShippingMethods;
@@ -35,7 +38,9 @@ public class ShippingMethodActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shipping_method);
 
-        Parcelable[] parcels = getIntent().getParcelableArrayExtra(SHIPPING_METHODS_KEY);
+        Intent intent = getIntent();
+        mSelected = intent.getIntExtra(SELECTED_METHOD_ID_KEY, 1);
+        Parcelable[] parcels = intent.getParcelableArrayExtra(SHIPPING_METHODS_KEY);
         if (parcels == null) {
             throw new IllegalStateException("Shipping method activity must be started with a list of shipping methods.");
         }
@@ -46,9 +51,7 @@ public class ShippingMethodActivity extends AppCompatActivity {
         mRgShippingMethods = findViewById(R.id.rgShippingMethods);
 
         LayoutInflater inflater = getLayoutInflater();
-        for (int i = 0; i < shippingMethods.size(); ++i) {
-            ShippingMethod method = shippingMethods.get(i);
-
+        for (ShippingMethod method : shippingMethods) {
             View view = inflater.inflate(R.layout.item_shipping_method, mRgShippingMethods, false);
 
             TextView tvShippingMethod = view.findViewById(R.id.tvShippingMethod);
@@ -57,13 +60,33 @@ public class ShippingMethodActivity extends AppCompatActivity {
             RadioButton rbSelect = view.findViewById(R.id.rbSelect);
 
             tvShippingMethod.setText(method.getName());
-            tvShippingFee.setText(TextHelper.formatPrice(method.getFee()));
-            tvEstimatedDelivery.setText(DateFormat.getDateInstance().format(method.getDeliveryTime()));
+            if (method.getFeeClass() == 0) {
+                tvShippingFee.setText(TextUtils.formatPrice(BigDecimal.ZERO));
+            } else if (method.getFee() == null) {
+                tvShippingFee.setText(R.string.undetermined);
+                tvShippingFee.setTypeface(null, Typeface.ITALIC);
+            } else {
+                tvShippingFee.setText(TextUtils.formatPrice(method.getFee()));
+                tvShippingFee.setTypeface(null, Typeface.NORMAL);
+            }
+            if (method.getSpeedClass() == 0) {
+                tvEstimatedDelivery.setText(R.string.not_available);
+                tvEstimatedDelivery.setTypeface(null, Typeface.ITALIC);
+            } else if (method.getDeliveryTime() == null) {
+                tvEstimatedDelivery.setText(R.string.undetermined);
+                tvEstimatedDelivery.setTypeface(null, Typeface.ITALIC);
+            } else {
+                tvEstimatedDelivery.setText(method.getDeliveryTime().format(DateTimeFormatter.ISO_LOCAL_DATE));
+                tvEstimatedDelivery.setTypeface(null, Typeface.NORMAL);
+            }
 
-            int id = i;
+            if (method.getId() == mSelected) {
+                rbSelect.setChecked(true);
+            }
+
             view.setOnClickListener(v -> {
                 rbSelect.setChecked(true);
-                mSelected = id;
+                mSelected = method.getId();
             });
 
             mRgShippingMethods.addView(view);

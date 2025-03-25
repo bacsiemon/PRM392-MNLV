@@ -8,6 +8,7 @@ import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
@@ -16,6 +17,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import retrofit2.Retrofit;
 import retrofit2.converter.moshi.MoshiConverterFactory;
 
@@ -65,18 +67,21 @@ public class ApiClient {
 
         final HostnameVerifier trustEveryone = (hostname, session) -> true;
 
+        String baseUrl = PROD_URL;
+        Predicate<Request> isInternalApi = request -> request.url().toString().startsWith(baseUrl);
+
         OkHttpClient client = new OkHttpClient.Builder()
                 .sslSocketFactory(sslSocketFactory, (X509TrustManager) trustAllCerts[0])
                 .hostnameVerifier(trustEveryone)
-                .addInterceptor(new BearerTokenInterceptor())
-                .authenticator(new BearerTokenAuthenticator())
-                .connectTimeout(5, TimeUnit.SECONDS)
-                .readTimeout(5, TimeUnit.SECONDS)
-                .writeTimeout(5, TimeUnit.SECONDS)
+                .addInterceptor(new BearerTokenInterceptor(isInternalApi))
+                .authenticator(new BearerTokenAuthenticator(isInternalApi))
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
                 .build();
 
         retrofit = new Retrofit.Builder()
-                .baseUrl(PROD_URL)
+                .baseUrl(baseUrl)
                 .client(client)
                 .addConverterFactory(MoshiConverterFactory.create(
                         new Moshi.Builder()

@@ -1,5 +1,6 @@
 package com.example.prm392mnlv.data.mappings;
 
+import com.example.prm392mnlv.data.dto.request.UserProfileUpdateRequest;
 import com.example.prm392mnlv.data.dto.response.UserProfileResponse;
 import com.example.prm392mnlv.data.models.User;
 
@@ -11,4 +12,6 @@ public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
     User toModel(UserProfileResponse dto);
+
+    UserProfileUpdateRequest toUpdateDto(User user);
 }
