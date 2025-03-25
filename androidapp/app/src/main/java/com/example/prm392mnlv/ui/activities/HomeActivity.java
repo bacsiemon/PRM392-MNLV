@@ -1,13 +1,8 @@
 package com.example.prm392mnlv.ui.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -21,12 +16,9 @@ import com.example.prm392mnlv.data.models.MenuItem;
 
 import java.util.Arrays;
 import java.util.List;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private BottomNavigationView navigationView;
     private RecyclerView recyclerView;
 
     @Override
@@ -40,6 +32,7 @@ public class HomeActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         recyclerView = findViewById(R.id.homeMenuRecyclerView);
         setupMenu();
     }
@@ -56,28 +49,5 @@ public class HomeActivity extends AppCompatActivity {
 
         MenuAdapter adapter = new MenuAdapter(menuList, this);
         recyclerView.setAdapter(adapter);
-        configureNavBar();
-    }
-
-    private void configureNavBar(){
-        navigationView = findViewById(R.id.bottom_nav_menu);
-        navigationView.setOnItemSelectedListener(item -> {
-            if (item.getItemId() == R.id.item_home) {
-                Toast.makeText(HomeActivity.this, "Home", Toast.LENGTH_SHORT).show();
-            }
-
-            if (item.getItemId() == R.id.item_cart) {
-                Toast.makeText(HomeActivity.this, "Cart", Toast.LENGTH_SHORT).show();
-            }
-
-            if (item.getItemId() == R.id.item_map) {
-                Toast.makeText(HomeActivity.this, "map", Toast.LENGTH_SHORT).show();
-            }
-
-            if (item.getItemId() == R.id.item_account) {
-                Toast.makeText(HomeActivity.this, "Account", Toast.LENGTH_SHORT).show();
-            }
-            return true;
-        });
     }
 }

@@ -43,7 +43,6 @@ import com.example.prm392mnlv.ui.adapters.CartCartItemAdapter;
 import com.example.prm392mnlv.ui.adapters.CartItemTouchCallback;
 import com.example.prm392mnlv.util.LogHelper;
 import com.example.prm392mnlv.util.NotificationHelper;
-import com.example.prm392mnlv.util.TextHelper;
 import com.example.prm392mnlv.util.TextUtils;
 
 import java.math.BigDecimal;
