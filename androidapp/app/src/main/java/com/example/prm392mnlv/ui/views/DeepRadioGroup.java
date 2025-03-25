@@ -1,4 +1,4 @@
-package com.example.prm392mnlv.ui.custom;
+package com.example.prm392mnlv.ui.views;
 
 import android.content.Context;
 import android.util.AttributeSet;

@@ -1,5 +1,6 @@
 package com.example.prm392mnlv.data.models;
 
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -20,6 +21,7 @@ public class Product extends ModelBase implements Parcelable {
     private String categoryId;
 
     private Category category;
+    private Drawable imageDrawable;
 
     public Product() {}
 
@@ -126,5 +128,14 @@ public class Product extends ModelBase implements Parcelable {
 
     public void setCategory(@NonNull Category category) {
         this.category = category;
+    }
+
+    @Nullable
+    public Drawable getImageDrawable() {
+        return imageDrawable;
+    }
+
+    public void setImageDrawable(@Nullable Drawable imageDrawable) {
+        this.imageDrawable = imageDrawable;
     }
 }

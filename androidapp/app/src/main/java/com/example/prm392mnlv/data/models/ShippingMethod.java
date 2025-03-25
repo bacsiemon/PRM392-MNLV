@@ -9,30 +9,34 @@ import androidx.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
 
 public class ShippingMethod implements Parcelable {
+    private int id;
     private String name;
     private int feeClass;
     private int speedClass;
 
     private BigDecimal fee;
-    private Date deliveryTime;
+    private LocalDate deliveryTime;
 
     public ShippingMethod() {}
 
-    public ShippingMethod(String name, int feeClass, int speedClass) {
+    public ShippingMethod(int id, String name, int feeClass, int speedClass) {
+        this.id = id;
         this.name = name;
         this.feeClass = feeClass;
         this.speedClass = speedClass;
     }
 
     protected ShippingMethod(@NonNull Parcel in) {
+        id = in.readInt();
         name = in.readString();
         feeClass = in.readInt();
         speedClass = in.readInt();
         fee = (BigDecimal) in.readSerializable();
-        deliveryTime = (Date) in.readSerializable();
+        deliveryTime = (LocalDate) in.readSerializable();
     }
 
     public static final Creator<ShippingMethod> CREATOR = new Creator<>() {
@@ -58,11 +62,20 @@ public class ShippingMethod implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeInt(id);
         dest.writeString(name);
         dest.writeInt(feeClass);
         dest.writeInt(speedClass);
         dest.writeSerializable(fee);
         dest.writeSerializable(deliveryTime);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @NonNull
@@ -100,11 +113,11 @@ public class ShippingMethod implements Parcelable {
     }
 
     @Nullable
-    public Date getDeliveryTime() {
+    public LocalDate getDeliveryTime() {
         return deliveryTime;
     }
 
-    public void setDeliveryTime(@Nullable Date deliveryTime) {
+    public void setDeliveryTime(@Nullable LocalDate deliveryTime) {
         this.deliveryTime = deliveryTime;
     }
 }
