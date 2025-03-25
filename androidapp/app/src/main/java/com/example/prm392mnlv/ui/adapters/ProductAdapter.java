@@ -13,11 +13,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.prm392mnlv.R;
 import com.example.prm392mnlv.data.models.Product;
-
-import com.bumptech.glide.Glide;
-import com.example.prm392mnlv.ui.activities.ProductDetailActivity;
+import com.example.prm392mnlv.ui.activities.ProductDetailsActivity;
 
 import java.util.List;
 
@@ -59,10 +58,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
         // Thêm sự kiện click cho toàn bộ item
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, ProductDetailActivity.class);
+            Intent intent = new Intent(context, ProductDetailsActivity.class);
+            intent.putExtra("productId", product.getId());
             intent.putExtra("productName", product.getProductName());
             intent.putExtra("description", product.getDescription());
-            intent.putExtra("price", product.getPrice().doubleValue());
+            intent.putExtra("price", product.getPrice());
             intent.putExtra("quantityInStock", product.getQuantityInStock());
             intent.putExtra("imageUrl", product.getImageUrl().toString());
             intent.putExtra("categoryName", product.getCategoryName());

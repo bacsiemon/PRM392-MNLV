@@ -2,7 +2,6 @@ package com.example.prm392mnlv.ui.activities;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +15,6 @@ import com.example.prm392mnlv.data.mappings.ProductMapper;
 import com.example.prm392mnlv.data.models.MenuItem;
 import com.example.prm392mnlv.data.models.Product;
 import com.example.prm392mnlv.retrofit.repositories.ProductRepository;
-import com.example.prm392mnlv.stores.TokenManager;
 import com.example.prm392mnlv.ui.adapters.MenuAdapter;
 import com.example.prm392mnlv.ui.adapters.ProductAdapter;
 
@@ -40,14 +38,9 @@ public class ProductListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_list);
 
-        // Lấy token từ TokenManager
-        String token = TokenManager.INSTANCE.getTokenBlocking(TokenManager.ACCESS_TOKEN);
-        Log.d("ProductListActivity", "Token: " + token);
-        // Hiển thị token (tùy chọn)
-        Toast.makeText(this, "Token: " + token, Toast.LENGTH_SHORT).show();
-
         menuRecyclerView = findViewById(R.id.menuRecyclerView);
         setupMenu();
+
         // Khởi tạo RecyclerView
         rvProducts = findViewById(R.id.rvProducts);
         rvProducts.setLayoutManager(new LinearLayoutManager(this));

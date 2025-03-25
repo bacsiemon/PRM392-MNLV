@@ -109,7 +109,8 @@ public class BearerTokenAuthenticator implements Authenticator {
             Context context = ApplicationExt.getCurrentActivity();
             if (context != null) {
                 new AlertDialog.Builder(context)
-                        .setPositiveButton(R.string.err_auth_return_home, (dialog, which) -> {
+                        .setMessage(R.string.err_auth_return_home)
+                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                             Intent intent = new Intent(context, LoginActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             context.startActivity(intent);
