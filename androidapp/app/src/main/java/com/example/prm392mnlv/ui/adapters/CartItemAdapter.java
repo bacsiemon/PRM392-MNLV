@@ -33,7 +33,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class CartCartItemAdapter extends RecyclerView.Adapter<CartCartItemAdapter.CartItemHolder>
+public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartItemHolder>
         implements CartItemTouchCallback.CartItemTouchAdapter {
     private final List<CartItem> mItems;
     private final CompositeDisposable mDisposables = new CompositeDisposable();
@@ -52,7 +52,7 @@ public class CartCartItemAdapter extends RecyclerView.Adapter<CartCartItemAdapte
 
     private Listener mListener;
 
-    public CartCartItemAdapter(List<CartItem> items) {
+    public CartItemAdapter(List<CartItem> items) {
         mItems = items;
     }
 

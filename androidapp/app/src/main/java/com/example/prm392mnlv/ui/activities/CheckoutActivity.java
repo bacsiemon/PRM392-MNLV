@@ -433,7 +433,12 @@ public class CheckoutActivity extends AppCompatActivity {
                     }
                     return;
                 }
-                //TODO: Summary screen
+
+                Intent intent = new Intent(CheckoutActivity.this, OrderSummaryActivity.class);
+                intent.putExtra(OrderSummaryActivity.ORDER_TOTAL_KEY, mGrandTotal);
+                intent.putExtra(OrderSummaryActivity.PAYMENT_METHOD_KEY, mPaymentMethod);
+                intent.putExtra(OrderSummaryActivity.SHIPPING_METHOD_KEY, mShippingMethod);
+                startActivity(intent);
             }
 
             @Override
