@@ -120,7 +120,7 @@ public class LoginActivity extends AppCompatActivity {
         TokenManager.INSTANCE.setTokenBlocking(TokenManager.REFRESH_TOKEN, response.refreshToken);
         TokenHelper.setToken(response.accessToken);
         Intent homeIntent = new Intent();
-        homeIntent.setClass(this, HomeActivity.class);
+        homeIntent.setClass(this, ProductListActivity.class);
         startActivity(homeIntent);
         finish();
     }

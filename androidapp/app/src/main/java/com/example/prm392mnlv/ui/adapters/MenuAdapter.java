@@ -42,20 +42,11 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
 
         holder.itemView.setOnClickListener(v -> {
             switch (item.title) {
-                case "Search":
-                    context.startActivity(new Intent(context, ProductListActivity.class));
-                    break;
-                case "Product Details":
-                    context.startActivity(new Intent(context, ProductDetailActivity.class));
-                    break;
                 case "Cart":
                     context.startActivity(new Intent(context, CartActivity.class));
                     break;
-                case "Checkout":
-                    context.startActivity(new Intent(context, CheckoutActivity.class));
-                    break;
-                case "Order Details":
-                    context.startActivity(new Intent(context, OrderDetailsActivity.class));
+                case "Logout":
+                    context.startActivity(new Intent(context, LogoutActivity.class));
                     break;
                 case "Map":
                     context.startActivity(new Intent(context, MapActivity.class));
