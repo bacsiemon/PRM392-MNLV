@@ -9,6 +9,13 @@ pluginManagement {
         }
         mavenCentral()
         gradlePluginPortal()
+        maven {
+            url = uri("https://jitpack.io")
+            credentials {
+                username = "truongdaivy57@gmail.com"
+                password = "DLDrfR9QB5nhvBS"
+            }
+        }
     }
 }
 dependencyResolutionManagement {
@@ -16,6 +23,14 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url = uri("https://plugins.gradle.org/m2/") }
+        maven {
+            url = uri("https://jitpack.io")
+            credentials {
+                username = "truongdaivy57@gmail.com"
+                password = "DLDrfR9QB5nhvBS"
+            }
+        }
     }
 }
 

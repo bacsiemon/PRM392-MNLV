@@ -1,7 +1,12 @@
 package com.example.prm392mnlv.ui.activities;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -37,6 +42,8 @@ import com.example.prm392mnlv.retrofit.repositories.ProductRepository;
 import com.example.prm392mnlv.ui.adapters.CartCartItemAdapter;
 import com.example.prm392mnlv.ui.adapters.CartItemTouchCallback;
 import com.example.prm392mnlv.util.LogHelper;
+import com.example.prm392mnlv.util.NotificationHelper;
+import com.example.prm392mnlv.util.TextHelper;
 import com.example.prm392mnlv.util.TextUtils;
 
 import java.math.BigDecimal;
@@ -83,6 +90,15 @@ public class CartActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.POST_NOTIFICATIONS},
+                        100);
+            }
+        }
+        
         mCartItemRepo = new CartItemRepository();
         mProductRepo = new ProductRepository();
         mCategoryRepo = new CategoryRepository();
@@ -484,4 +500,15 @@ public class CartActivity
             mCartItemAdapter.onDestroy();
         }
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mCartItems != null && !mCartItems.isEmpty()) {
+            NotificationHelper.showCartNotification(this, mCartItems.size());
+        } else {
+            NotificationHelper.clearBadge(this);
+        }
+    }
+
 }
