@@ -19,8 +19,6 @@ import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,22 +30,5 @@ public class HomeActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        recyclerView = findViewById(R.id.homeMenuRecyclerView);
-        setupMenu();
-    }
-
-    private void setupMenu() {
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2)); // 2 cột
-
-        List<MenuItem> menuList = Arrays.asList(
-                new MenuItem("Search", R.drawable.ic_search),
-                new MenuItem("Cart", R.drawable.ic_cart),
-                new MenuItem("Order Details", R.drawable.ic_order),
-                new MenuItem("Map", R.drawable.ic_map)
-        );
-
-        MenuAdapter adapter = new MenuAdapter(menuList, this);
-        recyclerView.setAdapter(adapter);
     }
 }

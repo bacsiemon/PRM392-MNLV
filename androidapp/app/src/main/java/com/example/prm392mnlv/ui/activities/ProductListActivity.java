@@ -6,18 +6,22 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.prm392mnlv.R;
 import com.example.prm392mnlv.data.dto.response.ProductResponse;
 import com.example.prm392mnlv.data.mappings.ProductMapper;
+import com.example.prm392mnlv.data.models.MenuItem;
 import com.example.prm392mnlv.data.models.Product;
 import com.example.prm392mnlv.retrofit.repositories.ProductRepository;
 import com.example.prm392mnlv.stores.TokenManager;
+import com.example.prm392mnlv.ui.adapters.MenuAdapter;
 import com.example.prm392mnlv.ui.adapters.ProductAdapter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import retrofit2.Call;
@@ -26,6 +30,7 @@ import retrofit2.Response;
 
 public class ProductListActivity extends AppCompatActivity {
     private RecyclerView rvProducts;
+    private RecyclerView menuRecyclerView;
     private ProductAdapter productAdapter;
     private List<Product> productList = new ArrayList<>();
     private ProductRepository productRepository;
@@ -41,9 +46,12 @@ public class ProductListActivity extends AppCompatActivity {
         // Hiển thị token (tùy chọn)
         Toast.makeText(this, "Token: " + token, Toast.LENGTH_SHORT).show();
 
+        menuRecyclerView = findViewById(R.id.menuRecyclerView);
+        setupMenu();
         // Khởi tạo RecyclerView
         rvProducts = findViewById(R.id.rvProducts);
         rvProducts.setLayoutManager(new LinearLayoutManager(this));
+
 
         // Khởi tạo adapter và gán cho RecyclerView
         productAdapter = new ProductAdapter(this, productList);
@@ -85,4 +93,17 @@ public class ProductListActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void setupMenu() {
+        menuRecyclerView.setLayoutManager(new GridLayoutManager(this, 2)); // 3 cột
+
+        List<MenuItem> menuList = Arrays.asList(
+                new MenuItem("Cart", R.drawable.ic_cart),
+                new MenuItem("Map", R.drawable.ic_map)
+        );
+
+        MenuAdapter adapter = new MenuAdapter(menuList, this);
+        menuRecyclerView.setAdapter(adapter);
+    }
+
 }

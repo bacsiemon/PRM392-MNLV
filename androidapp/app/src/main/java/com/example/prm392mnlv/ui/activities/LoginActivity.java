@@ -55,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
         String accessToken = TokenManager.INSTANCE.getTokenBlocking(TokenManager.ACCESS_TOKEN);
         if (!accessToken.isEmpty()) {
             Intent homeIntent = new Intent();
-            homeIntent.setClass(this, HomeActivity.class);
+            homeIntent.setClass(this, ProductListActivity.class);
             startActivity(homeIntent);
             finish();
         } else {
