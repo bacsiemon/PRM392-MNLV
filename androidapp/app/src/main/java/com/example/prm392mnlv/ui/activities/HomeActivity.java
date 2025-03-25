@@ -44,7 +44,6 @@ public class HomeActivity extends AppCompatActivity {
 
         List<MenuItem> menuList = Arrays.asList(
                 new MenuItem("Search", R.drawable.ic_search),
-                new MenuItem("Product Details", R.drawable.ic_product),
                 new MenuItem("Cart", R.drawable.ic_cart),
                 new MenuItem("Order Details", R.drawable.ic_order),
                 new MenuItem("Map", R.drawable.ic_map)
