@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.prm392mnlv"
-        minSdk = 25
+        minSdk = 26
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -31,21 +31,24 @@ android {
 }
 
 dependencies {
+
+    implementation(libs.core)
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation(libs.recyclerview)
+    implementation(libs.recyclerview.swipedecorator)
     implementation(libs.retrofit.v2110)
     implementation(libs.converter.moshi)
     implementation(libs.moshi.adapters)
-    implementation(libs.mapstruct)
     implementation(libs.datastore.preferences)
     implementation(libs.datastore.preferences.rxjava3)
-    implementation(libs.rxandroid)
     implementation(libs.datastore.preferences.core.jvm)
-    implementation(libs.core)
+    implementation(libs.rxandroid)
+    implementation(files("src/main/libs/zpdk-release-v3.1.aar"))
+    implementation(libs.mapstruct)
     annotationProcessor(libs.mapstruct.processor)
-    implementation(libs.recyclerview)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -77,5 +80,5 @@ dependencies {
     // Sử dụng Glide từ version catalog
     implementation(libs.glide)
     annotationProcessor(libs.glide.compiler)
+    implementation(libs.jwtdecode)
 }
-

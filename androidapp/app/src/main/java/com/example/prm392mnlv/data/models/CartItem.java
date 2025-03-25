@@ -1,5 +1,6 @@
 package com.example.prm392mnlv.data.models;
 
+import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
 

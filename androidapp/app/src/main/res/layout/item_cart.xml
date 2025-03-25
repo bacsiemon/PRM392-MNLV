@@ -62,7 +62,6 @@
                 android:id="@+id/tvCategory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_category_tag"
                 android:gravity="end"
                 android:paddingHorizontal="4dp"
                 android:textColor="@color/mint"

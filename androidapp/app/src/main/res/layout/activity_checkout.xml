@@ -34,7 +34,8 @@
     <ScrollView
         android:id="@+id/layoutDetails"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/layoutFooter"
         app:layout_constraintTop_toBottomOf="@+id/layoutHeader">
 
         <LinearLayout
@@ -99,7 +100,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="start"
                         android:textColor="@color/gray_dark"
-                        android:textSize="12sp"
+                        android:textSize="13sp"
                         app:layout_constraintEnd_toStartOf="@id/ivChangeAddress"
                         app:layout_constraintStart_toStartOf="@+id/tvUserName"
                         app:layout_constraintTop_toBottomOf="@+id/tvUserName"
@@ -286,7 +287,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <com.example.prm392mnlv.ui.custom.DeepRadioGroup
+                    <com.example.prm392mnlv.ui.views.DeepRadioGroup
                         android:id="@+id/rgPaymentMethods"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -402,7 +403,7 @@
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
-                                android:id="@+id/tvOrderTotal"
+                                android:id="@+id/tvGrandTotal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="sans-serif-medium"
@@ -419,6 +420,7 @@
     </ScrollView>
 
     <LinearLayout
+        android:id="@+id/layoutFooter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_cart_summary"
@@ -438,7 +440,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tvFooterTotal"
+            android:id="@+id/tvTotalFooter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
@@ -461,7 +463,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end|center_vertical"
             android:layout_marginEnd="8dp"
-            android:backgroundTint="@color/coral"
+            android:backgroundTint="@color/mint"
             android:gravity="center"
             android:text="@string/place_order"
             android:textColor="@color/off_white"

@@ -31,7 +31,7 @@
         tools:text="Cash on delivery" />
 
     <androidx.appcompat.widget.AppCompatRadioButton
-        android:id="@+id/cbPaymentMethod"
+        android:id="@+id/rbPaymentMethod"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:minWidth="0dp"

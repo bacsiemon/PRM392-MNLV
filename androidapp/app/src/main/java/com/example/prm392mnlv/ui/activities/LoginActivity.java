@@ -5,14 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -22,6 +19,7 @@ import com.example.prm392mnlv.R;
 import com.example.prm392mnlv.data.dto.response.LoginResponse;
 import com.example.prm392mnlv.retrofit.repositories.AuthManager;
 import com.example.prm392mnlv.stores.TokenManager;
+import com.example.prm392mnlv.util.TokenHelper;
 
 import java.util.regex.Pattern;
 
@@ -53,7 +51,16 @@ public class LoginActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        configureView();
+
+        String accessToken = TokenManager.INSTANCE.getTokenBlocking(TokenManager.ACCESS_TOKEN);
+        if (!accessToken.isEmpty()) {
+            Intent homeIntent = new Intent();
+            homeIntent.setClass(this, CartActivity.class);
+            startActivity(homeIntent);
+            finish();
+        } else {
+            configureView();
+        }
     }
 
     @Override
@@ -80,8 +87,8 @@ public class LoginActivity extends AppCompatActivity {
             @SuppressLint("SetTextI18n")
             @Override
             public void onResponse(@NonNull Call<LoginResponse> call, @NonNull Response<LoginResponse> response) {
-                if (!response.isSuccessful()){
-                    switch (response.code()){
+                if (!response.isSuccessful()) {
+                    switch (response.code()) {
                         case 400:
                             mStatus.setText(R.string.INVALID_EMAIL_OR_NOT_CONFIRMED);
                             return;
@@ -106,13 +113,14 @@ public class LoginActivity extends AppCompatActivity {
         };
         authManager.login(email, password, callback);
     }
-    private void onLoginSuccess(LoginResponse response){
+
+    private void onLoginSuccess(@NonNull LoginResponse response) {
         mStatus.setText("Success");
-        TokenManager.init(getBaseContext());
-        TokenManager.INSTANCE.setToken(TokenManager.ACCESS_TOKEN, response.accessToken);
-        TokenManager.INSTANCE.setToken(TokenManager.REFRESH_TOKEN, response.refreshToken);
+        TokenManager.INSTANCE.setTokenBlocking(TokenManager.ACCESS_TOKEN, response.accessToken);
+        TokenManager.INSTANCE.setTokenBlocking(TokenManager.REFRESH_TOKEN, response.refreshToken);
+        TokenHelper.setToken(response.accessToken);
         Intent homeIntent = new Intent();
-        homeIntent.setClass(this, HomeActivity.class);
+        homeIntent.setClass(this, CartActivity.class);
         startActivity(homeIntent);
         finish();
     }
@@ -143,27 +151,28 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
 
-    private void toRegister(){
+    private void toRegister() {
         onPause();
         Intent intent = new Intent();
         intent.setClass(this, RegisterActivity.class);
         getContent.launch(intent);
     }
+
     private ActivityResultLauncher<Intent> getContent = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
             result -> {
-                try{
+                try {
                     String email = result.getData().getStringExtra("Email");
                     String password = result.getData().getStringExtra("Password");
-                    if (result.getResultCode() == LoginActivity.RESULT_OK){
+                    if (result.getResultCode() == LoginActivity.RESULT_OK) {
                         mEmail.setText(email == null ? "" : email);
                         mPassword.setText(password == null ? "" : password);
                         onLogin();
                     }
-                }catch (Exception ex){
+                } catch (Exception ex) {
                 }
             });
 
-    private void toEmailConfirmation(){
+    private void toEmailConfirmation() {
         Intent intent = new Intent();
         intent.setClass(this, RegisterConfirmationActivity.class);
         intent.putExtra("Email", mEmail.getText().toString().trim());

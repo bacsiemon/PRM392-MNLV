@@ -21,11 +21,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.prm392mnlv.R;
-import com.example.prm392mnlv.ui.adapters.CartItemAdapter;
 import com.example.prm392mnlv.data.dto.response.CartItemResponse;
 import com.example.prm392mnlv.data.dto.response.CategoryResponse;
 import com.example.prm392mnlv.data.dto.response.MessageResponse;
@@ -39,10 +39,12 @@ import com.example.prm392mnlv.data.models.Product;
 import com.example.prm392mnlv.retrofit.repositories.CartItemRepository;
 import com.example.prm392mnlv.retrofit.repositories.CategoryRepository;
 import com.example.prm392mnlv.retrofit.repositories.ProductRepository;
-import com.example.prm392mnlv.stores.TokenManager;
+import com.example.prm392mnlv.ui.adapters.CartCartItemAdapter;
+import com.example.prm392mnlv.ui.adapters.CartItemTouchCallback;
 import com.example.prm392mnlv.util.LogHelper;
 import com.example.prm392mnlv.util.NotificationHelper;
 import com.example.prm392mnlv.util.TextHelper;
+import com.example.prm392mnlv.util.TextUtils;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -59,7 +61,7 @@ import retrofit2.Response;
 
 public class CartActivity
         extends AppCompatActivity
-        implements CartItemAdapter.Listener {
+        implements CartCartItemAdapter.Listener {
 
     private static final String TAG = "CartActivity";
 
@@ -68,22 +70,23 @@ public class CartActivity
     private CategoryRepository mCategoryRepo;
 
     private List<CartItem> mCartItems;
-    private CartItemAdapter mCartItemAdapter;
+    private CartCartItemAdapter mCartItemAdapter;
 
     private TextView mTvCartTitle;
     private RecyclerView mRvCartItems;
-    private ViewGroup mLytError;
+    private ViewGroup mLayoutError;
     private ImageView mIvErrorIcon;
     private TextView mTvErrorMessage;
+
     private CheckBox mCbSelectAll;
-    private TextView mTvTotal;
+    private TextView mTvTotalFooter;
     private Button mBtnCheckout;
+    private Button mBtnDelete;
+
+    private boolean deleteMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // ************** DELETE AFTER TEST **************
-        TokenManager.init(this);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
 
@@ -95,29 +98,36 @@ public class CartActivity
                         100);
             }
         }
-
-        mTvCartTitle = findViewById(R.id.tvCartTitle);
-        mRvCartItems = findViewById(R.id.rvCartItems);
-        mLytError = findViewById(R.id.lytError);
-        mIvErrorIcon = findViewById(R.id.ivErrorIcon);
-        mTvErrorMessage = findViewById(R.id.tvErrorMessage);
-        mCbSelectAll = findViewById(R.id.cbSelectAll);
-        mTvTotal = findViewById(R.id.tvFooterTotal);
-        mBtnCheckout = findViewById(R.id.btnCheckout);
-
-        mRvCartItems.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        mRvCartItems.setVisibility(View.VISIBLE);
-        mLytError.setVisibility(View.GONE);
-
+        
         mCartItemRepo = new CartItemRepository();
         mProductRepo = new ProductRepository();
         mCategoryRepo = new CategoryRepository();
+
+        mTvCartTitle = findViewById(R.id.tvCartTitle);
+        mRvCartItems = findViewById(R.id.rvCartItems);
+        mLayoutError = findViewById(R.id.layoutError);
+        mIvErrorIcon = findViewById(R.id.ivErrorIcon);
+        mTvErrorMessage = findViewById(R.id.tvErrorMessage);
+        mCbSelectAll = findViewById(R.id.cbSelectAll);
+        mTvTotalFooter = findViewById(R.id.tvTotalFooter);
+        mBtnCheckout = findViewById(R.id.btnCheckout);
+        mBtnDelete = findViewById(R.id.btnDelete);
+
+        mRvCartItems.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        mRvCartItems.setVisibility(View.VISIBLE);
+        mLayoutError.setVisibility(View.GONE);
+
+        mCbSelectAll.setOnCheckedChangeListener(this::onSelectAll);
+        findViewById(R.id.ivEdit).setOnClickListener(this::toggleDeleteMode);
+        mBtnCheckout.setOnClickListener(this::onCheckout);
+        mBtnDelete.setOnClickListener(this::onDelete);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         fetchCartItems();
+        mCbSelectAll.setChecked(false);
     }
 
     private void fetchCartItems() {
@@ -201,6 +211,7 @@ public class CartActivity
             public void onResponse(@NonNull Call<List<CategoryResponse>> call, @NonNull Response<List<CategoryResponse>> response) {
                 if (!response.isSuccessful()) {
                     LogHelper.logErrorResponse(TAG, response);
+                    checkProgress();
                     return;
                 }
 
@@ -234,82 +245,110 @@ public class CartActivity
 
     private void showEmptyCart() {
         mRvCartItems.setVisibility(View.GONE);
-        mLytError.setVisibility(View.VISIBLE);
+        mLayoutError.setVisibility(View.VISIBLE);
         mIvErrorIcon.setImageResource(R.drawable.cart_empty);
         mTvErrorMessage.setText(R.string.empty_cart);
     }
 
     private void showLoadError() {
         mRvCartItems.setVisibility(View.GONE);
-        mLytError.setVisibility(View.VISIBLE);
+        mLayoutError.setVisibility(View.VISIBLE);
         mIvErrorIcon.setImageResource(R.drawable.network_issue);
         mTvErrorMessage.setText(R.string.network_error);
     }
 
     private void showCartItems() {
         mRvCartItems.setVisibility(View.VISIBLE);
-        mLytError.setVisibility(View.GONE);
-        mCartItemAdapter = new CartItemAdapter(mCartItems);
+        mLayoutError.setVisibility(View.GONE);
+
+        mCartItemAdapter = new CartCartItemAdapter(mCartItems);
         mRvCartItems.setAdapter(mCartItemAdapter);
+        ItemTouchHelper.Callback callback = new CartItemTouchCallback(mCartItemAdapter);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(mRvCartItems);
 
         mTvCartTitle.setText(String.format(Locale.getDefault(), "Cart (%d)", mCartItems.size()));
-        mTvTotal.setText(TextHelper.formatPrice(BigDecimal.ZERO));
-        mCbSelectAll.setOnCheckedChangeListener(this::onSelectAll);
-        mBtnCheckout.setOnClickListener(this::onCheckout);
+        mTvTotalFooter.setText(TextUtils.formatPrice(BigDecimal.ZERO));
     }
 
-    //FIXME: There should really be an API for this.
-    private void updateTotalPrice() {
-        List<CartItem> selectedItems = mCartItems.parallelStream().filter(CartItem::isSelected).collect(Collectors.toList());
-        int size = selectedItems.size();
-        AtomicInteger count = new AtomicInteger();
+    private void toggleDeleteMode(View v) {
+        if (!deleteMode) {
+            deleteMode = true;
+            mTvTotalFooter.setVisibility(View.GONE);
+            mBtnCheckout.setVisibility(View.GONE);
+            mBtnDelete.setVisibility(View.VISIBLE);
+        } else {
+            deleteMode = false;
+            mTvTotalFooter.setVisibility(View.VISIBLE);
+            mBtnCheckout.setVisibility(View.VISIBLE);
+            mBtnDelete.setVisibility(View.GONE);
+        }
+    }
+
+    private void onCheckout(View view) {
+        CartItem[] selectedItems = mCartItems.stream().filter(CartItem::isSelected).toArray(CartItem[]::new);
+        if (selectedItems.length == 0) {
+            new AlertDialog.Builder(CartActivity.this)
+                    .setMessage(R.string.err_cart_checkout_no_item)
+                    .setPositiveButton(android.R.string.ok, (dialog, which) -> {})
+                    .show();
+            return;
+        }
+        Intent intent = new Intent(this, CheckoutActivity.class);
+        intent.putExtra(CheckoutActivity.CART_ITEMS_KEY, selectedItems);
+        startActivity(intent);
+    }
+
+    private void onDelete(View v) {
+        if (mCartItems.stream().noneMatch(CartItem::isSelected)) {
+            new AlertDialog.Builder(CartActivity.this)
+                    .setMessage(R.string.err_cart_delete_no_item)
+                    .setPositiveButton(android.R.string.ok, (dialog, which) -> {})
+                    .show();
+            return;
+        }
+        new AlertDialog.Builder(CartActivity.this)
+                .setMessage(R.string.confirm__cart_remove_selected_products)
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> removeSelectedCartItems())
+                .setNegativeButton(android.R.string.cancel, (dialog, which) -> {})
+                .show();
+    }
+
+    private void removeSelectedCartItems() {
         AtomicBoolean failed = new AtomicBoolean();
-        AtomicReference<BigDecimal> total = new AtomicReference<>(BigDecimal.ZERO);
+        for (int i = 0; i < mCartItems.size(); ++i) {
+            if (mCartItems.get(i).isSelected()) {
+                int idx = i;
+                mCartItemRepo.deleteCartItem(mCartItems.get(i).getId(), new Callback<>() {
+                    @Override
+                    public void onResponse(@NonNull Call<MessageResponse> call, @NonNull Response<MessageResponse> response) {
+                        if (!response.isSuccessful()) {
+                            failed.set(true);
+                            LogHelper.logErrorResponse(TAG, response);
+                            return;
+                        }
+                        mCartItems.remove(idx);
+                        mCartItemAdapter.notifyItemRemoved(idx);
+                    }
 
-        selectedItems.forEach(cartItem -> mProductRepo.getProducts(cartItem.getProductId(), null, null, new Callback<>() {
-            @Override
-            public void onResponse(@NonNull Call<List<ProductResponse>> call, @NonNull Response<List<ProductResponse>> response) {
-                if (failed.get()) return;
-
-                if (!response.isSuccessful()) {
-                    LogHelper.logErrorResponse(TAG, response);
-                    return;
-                }
-
-                List<ProductResponse> productResponses = response.body();
-                assert productResponses != null;
-                assert productResponses.size() == 1;
-
-                Product product = ProductMapper.INSTANCE.toModel(productResponses.get(0));
-                if (cartItem.getProduct() != null) {
-                    cartItem.getProduct().setPrice(product.getPrice());
-                }
-                addToTotal(product.getPrice());
+                    @Override
+                    public void onFailure(@NonNull Call<MessageResponse> call, @NonNull Throwable throwable) {
+                        failed.set(true);
+                        LogHelper.logFailure(TAG, throwable);
+                    }
+                });
             }
-
-            @Override
-            public void onFailure(@NonNull Call<List<ProductResponse>> call, @NonNull Throwable throwable) {
-                LogHelper.logFailure(TAG, throwable);
-                failed.set(true);
-            }
-
-            private void addToTotal(BigDecimal price) {
-                if (!failed.get()) {
-                    total.accumulateAndGet(price, BigDecimal::add);
-                }
-                if (count.incrementAndGet() < size) return;
-                if (failed.get()) {
-                    Toast.makeText(CartActivity.this, "Failed to calculate total.", Toast.LENGTH_SHORT).show();
-                }
-
-                String totalPrice = TextHelper.formatPrice(total.get());
-                mTvTotal.setText(totalPrice);
-            }
-        }));
+        }
+        if (failed.get()) {
+            Toast.makeText(CartActivity.this, R.string.err_product_removal_failed, Toast.LENGTH_SHORT).show();
+        }
+        updateTotalPrice();
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private void onSelectAll(CompoundButton buttonView, boolean isChecked) {
+    private void onSelectAll(@NonNull CompoundButton buttonView, boolean isChecked) {
+        // Return if the button was checked programmatically
+        if (!buttonView.isPressed()) return;
         mCartItems.forEach(cartItem -> cartItem.setSelected(isChecked));
         mCartItemAdapter.notifyDataSetChanged();
         updateTotalPrice();
@@ -342,62 +381,124 @@ public class CartActivity
             public void onResponse(@NonNull Call<MessageResponse> call, @NonNull Response<MessageResponse> response) {
                 if (!response.isSuccessful()) {
                     LogHelper.logErrorResponse(TAG, response);
-                    Toast.makeText(CartActivity.this, R.string.update_failed_cart_item, Toast.LENGTH_LONG).show();
+                    Toast.makeText(CartActivity.this, R.string.err_cart_update_failed, Toast.LENGTH_LONG).show();
                     return;
                 }
                 cartItem.setQuantity(newQuantity);
                 mCartItems.set(position, cartItem);
                 mCartItemAdapter.notifyItemChanged(position);
+                updateTotalPrice();
             }
 
             @Override
             public void onFailure(@NonNull Call<MessageResponse> call, @NonNull Throwable throwable) {
                 LogHelper.logFailure(TAG, throwable);
-                Toast.makeText(CartActivity.this, R.string.update_failed_cart_item, Toast.LENGTH_LONG).show();
+                Toast.makeText(CartActivity.this, R.string.err_cart_update_failed, Toast.LENGTH_LONG).show();
             }
         });
     }
 
     @Override
     public void onCartItemDeleted(int position) {
+        new AlertDialog.Builder(CartActivity.this)
+                .setMessage(R.string.confirm_cart_remove_product)
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> removeCartItem(position))
+                .setNegativeButton(android.R.string.cancel, (dialog, which) -> {})
+                .show();
+    }
+
+    private void removeCartItem(int position) {
         mCartItemRepo.deleteCartItem(mCartItems.get(position).getId(), new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<MessageResponse> call, @NonNull Response<MessageResponse> response) {
                 if (!response.isSuccessful()) {
                     LogHelper.logErrorResponse(TAG, response);
-                    Toast.makeText(CartActivity.this, R.string.delete_failed_cart_item, Toast.LENGTH_LONG).show();
+                    Toast.makeText(CartActivity.this, R.string.err_cart_delete_failed, Toast.LENGTH_LONG).show();
                     return;
                 }
                 mCartItems.remove(position);
                 mCartItemAdapter.notifyItemRemoved(position);
+                updateTotalPrice();
             }
 
             @Override
             public void onFailure(@NonNull Call<MessageResponse> call, @NonNull Throwable throwable) {
                 LogHelper.logFailure(TAG, throwable);
-                Toast.makeText(CartActivity.this, R.string.delete_failed_cart_item, Toast.LENGTH_SHORT).show();
+                Toast.makeText(CartActivity.this, R.string.err_cart_delete_failed, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void onCheckout(View view) {
-        CartItem[] selectedItems = mCartItems.stream().filter(CartItem::isSelected).toArray(CartItem[]::new);
-        if (selectedItems.length == 0) {
-            new AlertDialog.Builder(CartActivity.this)
-                    .setMessage("You have not selected any product.")
-                    .setPositiveButton(android.R.string.ok, (dialog, which) -> {})
-                    .show();
+    //FIXME: There should really be an API for this. This method makes an excessive number of API calls, just to get the latest prices.
+    private void updateTotalPrice() {
+        List<CartItem> selectedItems = mCartItems.parallelStream().filter(CartItem::isSelected).collect(Collectors.toList());
+
+        if (selectedItems.isEmpty()) {
+            mTvTotalFooter.setText(TextUtils.formatPrice(BigDecimal.ZERO));
             return;
         }
-        Intent intent = new Intent(this, CheckoutActivity.class);
-        intent.putExtra(CheckoutActivity.CART_ITEMS_KEY, selectedItems);
-        startActivity(intent);
+
+        int size = selectedItems.size();
+        AtomicInteger count = new AtomicInteger();
+        AtomicBoolean failed = new AtomicBoolean();
+        AtomicReference<BigDecimal> total = new AtomicReference<>(BigDecimal.ZERO);
+
+        selectedItems.parallelStream().forEach(cartItem -> mProductRepo.getProducts(cartItem.getProductId(), null, null, new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<List<ProductResponse>> call, @NonNull Response<List<ProductResponse>> response) {
+                if (failed.get()) {
+                    addToTotal(null);
+                    return;
+                }
+
+                if (!response.isSuccessful()) {
+                    failed.set(true);
+                    LogHelper.logErrorResponse(TAG, response);
+                    addToTotal(null);
+                    return;
+                }
+
+                List<ProductResponse> productResponses = response.body();
+                assert productResponses != null;
+                assert productResponses.size() == 1;
+
+                Product product = ProductMapper.INSTANCE.toModel(productResponses.get(0));
+                if (cartItem.getProduct() != null) {
+                    cartItem.getProduct().setPrice(product.getPrice());
+                }
+                addToTotal(product.getPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity())));
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<ProductResponse>> call, @NonNull Throwable throwable) {
+                failed.set(true);
+                LogHelper.logFailure(TAG, throwable);
+                addToTotal(null);
+            }
+
+            private void addToTotal(BigDecimal price) {
+                if (!failed.get()) {
+                    total.accumulateAndGet(price, BigDecimal::add);
+                }
+
+                if (count.incrementAndGet() < size) return;
+
+                if (failed.get()) {
+                    Toast.makeText(CartActivity.this, R.string.err_cart_calculate_total_failed, Toast.LENGTH_SHORT).show();
+                } else {
+                    String totalPrice = TextUtils.formatPrice(total.get());
+                    mTvTotalFooter.setText(totalPrice);
+                }
+            }
+        }));
     }
 
     @Override
     protected void onDestroy() {
-        mCartItemAdapter.onDestroy();
         super.onDestroy();
+        if (mCartItemAdapter != null) {
+            mCartItemAdapter.onDestroy();
+        }
     }
 
     @Override
