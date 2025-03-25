@@ -24,9 +24,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="8dp"
-            android:text="Product Name"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:text="Product Name" />
 
         <!-- Mô tả sản phẩm -->
         <TextView
@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="8dp"
-            android:text="Description" />
+            tools:text="Description" />
 
         <!-- Giá sản phẩm -->
         <TextView
@@ -42,9 +42,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="8dp"
-            android:text="Price"
             android:textColor="@color/coral"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:text="Price" />
 
         <!-- Số lượng tồn kho -->
         <TextView
@@ -52,14 +52,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="8dp"
-            android:text="Stock" />
+            tools:text="Stock" />
 
         <!-- Category -->
         <TextView
             android:id="@+id/tvCategory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Category" />
+            tools:text="Category" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -76,9 +76,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
+                android:layout_marginEnd="8dp"
                 android:background="@drawable/bg_quantity_selector"
                 android:orientation="horizontal"
-                android:layout_marginEnd="8dp"
                 android:paddingHorizontal="4dp"
                 android:paddingVertical="4dp">
 
@@ -118,7 +118,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Add to Cart" />
+                android:text="@string/btn_add_to_cart" />
         </LinearLayout>
 
     </LinearLayout>

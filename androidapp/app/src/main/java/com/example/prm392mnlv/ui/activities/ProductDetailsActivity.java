@@ -1,5 +1,6 @@
 package com.example.prm392mnlv.ui.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -8,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
@@ -15,6 +17,7 @@ import com.example.prm392mnlv.R;
 import com.example.prm392mnlv.data.dto.response.MessageResponse;
 import com.example.prm392mnlv.data.models.CartItem;
 import com.example.prm392mnlv.retrofit.repositories.CartItemRepository;
+import com.example.prm392mnlv.retrofit.repositories.CategoryRepository;
 import com.example.prm392mnlv.util.LogHelper;
 import com.example.prm392mnlv.util.TextUtils;
 import com.example.prm392mnlv.util.ViewHelper;
@@ -27,7 +30,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ProductDetailsActivity extends AppCompatActivity {
+    private static final String TAG = "ProductDetails";
 
+    private CategoryRepository mCategoryRepo;
     private CartItemRepository mCartRepo;
 
     private ImageView ivProductImage;
@@ -42,6 +47,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_details);
 
+        mCategoryRepo = new CategoryRepository();
         mCartRepo = new CartItemRepository();
 
         ivProductImage = findViewById(R.id.ivProductImage);
@@ -125,7 +131,11 @@ public class ProductDetailsActivity extends AppCompatActivity {
                     return;
                 }
 
-                ViewHelper.showAlert(ProductDetailsActivity.this, R.string.success_product_details_add_to_cart);
+                new AlertDialog.Builder(ProductDetailsActivity.this)
+                        .setMessage(R.string.success_product_details_add_to_cart)
+                        .setPositiveButton(R.string.btn_buy_now, (dialog, which) -> startActivity(new Intent(ProductDetailsActivity.this, CartActivity.class)))
+                        .setNeutralButton(android.R.string.ok, (dialog, which) -> {})
+                        .show();
             }
 
             @Override
