@@ -39,11 +39,12 @@ import com.example.prm392mnlv.data.models.Product;
 import com.example.prm392mnlv.retrofit.repositories.CartItemRepository;
 import com.example.prm392mnlv.retrofit.repositories.CategoryRepository;
 import com.example.prm392mnlv.retrofit.repositories.ProductRepository;
-import com.example.prm392mnlv.ui.adapters.CartCartItemAdapter;
+import com.example.prm392mnlv.ui.adapters.CartItemAdapter;
 import com.example.prm392mnlv.ui.adapters.CartItemTouchCallback;
 import com.example.prm392mnlv.util.LogHelper;
 import com.example.prm392mnlv.util.NotificationHelper;
 import com.example.prm392mnlv.util.TextUtils;
+import com.example.prm392mnlv.util.ViewHelper;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -60,7 +61,7 @@ import retrofit2.Response;
 
 public class CartActivity
         extends AppCompatActivity
-        implements CartCartItemAdapter.Listener {
+        implements CartItemAdapter.Listener {
 
     private static final String TAG = "CartActivity";
 
@@ -69,7 +70,7 @@ public class CartActivity
     private CategoryRepository mCategoryRepo;
 
     private List<CartItem> mCartItems;
-    private CartCartItemAdapter mCartItemAdapter;
+    private CartItemAdapter mCartItemAdapter;
 
     private TextView mTvCartTitle;
     private RecyclerView mRvCartItems;
@@ -116,10 +117,14 @@ public class CartActivity
         mRvCartItems.setVisibility(View.VISIBLE);
         mLayoutError.setVisibility(View.GONE);
 
-        mCbSelectAll.setOnCheckedChangeListener(this::onSelectAll);
         findViewById(R.id.ivEdit).setOnClickListener(this::toggleDeleteMode);
-        mBtnCheckout.setOnClickListener(this::onCheckout);
         mBtnDelete.setOnClickListener(this::onDelete);
+        mCbSelectAll.setOnCheckedChangeListener(this::onSelectAll);
+        mBtnCheckout.setOnClickListener(this::onCheckout);
+
+        ViewHelper.disable(mBtnDelete);
+        ViewHelper.disable(mCbSelectAll);
+        ViewHelper.disable(mBtnCheckout);
     }
 
     @Override
@@ -259,8 +264,11 @@ public class CartActivity
     private void showCartItems() {
         mRvCartItems.setVisibility(View.VISIBLE);
         mLayoutError.setVisibility(View.GONE);
+        ViewHelper.enable(mBtnDelete);
+        ViewHelper.enable(mCbSelectAll);
+        ViewHelper.enable(mBtnCheckout);
 
-        mCartItemAdapter = new CartCartItemAdapter(mCartItems);
+        mCartItemAdapter = new CartItemAdapter(mCartItems);
         mRvCartItems.setAdapter(mCartItemAdapter);
         ItemTouchHelper.Callback callback = new CartItemTouchCallback(mCartItemAdapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
