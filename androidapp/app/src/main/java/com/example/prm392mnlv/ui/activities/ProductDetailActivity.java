@@ -33,13 +33,13 @@ public class ProductDetailActivity extends AppCompatActivity {
             double price = getIntent().getDoubleExtra("price", 0);
             int quantityInStock = getIntent().getIntExtra("quantityInStock", 0);
             String imageUrl = getIntent().getStringExtra("imageUrl");
-            String categoryId = getIntent().getStringExtra("categoryId");
+            String categoryName = getIntent().getStringExtra("categoryName");
 
             tvProductName.setText(productName);
             tvDescription.setText(description);
             tvPrice.setText("$" + price);
             tvStock.setText("Stock: " + quantityInStock);
-            tvCategory.setText("Category: " + categoryId);
+            tvCategory.setText("Category: " + categoryName);
 
             Glide.with(this)
                     .load(imageUrl)

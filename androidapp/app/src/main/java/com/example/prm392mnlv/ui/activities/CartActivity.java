@@ -198,7 +198,7 @@ public class CartActivity
 
     private void fetchCategoryInfo() {
         Set<String> categoryIds = mCartItems.stream()
-                .map(e -> e.getProduct() != null ? e.getProduct().getCategoryId() : null)
+                .map(e -> e.getProduct() != null ? e.getProduct().getCategoryName() : null)
                 .collect(Collectors.toSet());
         categoryIds.remove(null);
 
@@ -221,7 +221,7 @@ public class CartActivity
                 Category category = CategoryMapper.INSTANCE.toModel(categoryDTOs.get(0));
                 mCartItems.forEach(cartItem -> {
                     Product product = cartItem.getProduct();
-                    if (product != null && category.getId().equals(product.getCategoryId())) {
+                    if (product != null && category.getId().equals(product.getCategoryName())) {
                         product.setCategory(category);
                     }
                 });
