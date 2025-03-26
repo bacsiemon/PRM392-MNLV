@@ -103,6 +103,7 @@ public class LoginActivity extends AppCompatActivity {
                             return;
                     }
                 }
+                assert response.body() != null;
                 onLoginSuccess(response.body());
             }
 
@@ -115,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void onLoginSuccess(@NonNull LoginResponse response) {
-        mStatus.setText("Success");
+        mStatus.setText(R.string.success_login);
         TokenManager.INSTANCE.setTokenBlocking(TokenManager.ACCESS_TOKEN, response.accessToken);
         TokenManager.INSTANCE.setTokenBlocking(TokenManager.REFRESH_TOKEN, response.refreshToken);
         TokenHelper.setToken(response.accessToken);
@@ -165,9 +166,10 @@ public class LoginActivity extends AppCompatActivity {
         getContent.launch(intent);
     }
 
-    private ActivityResultLauncher<Intent> getContent = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+    private final ActivityResultLauncher<Intent> getContent = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 try {
+                    assert result.getData() != null;
                     String email = result.getData().getStringExtra("Email");
                     String password = result.getData().getStringExtra("Password");
                     if (result.getResultCode() == LoginActivity.RESULT_OK) {
@@ -175,7 +177,7 @@ public class LoginActivity extends AppCompatActivity {
                         mPassword.setText(password == null ? "" : password);
                         onLogin();
                     }
-                } catch (Exception ex) {
+                } catch (Exception ignored) {
                 }
             });
 

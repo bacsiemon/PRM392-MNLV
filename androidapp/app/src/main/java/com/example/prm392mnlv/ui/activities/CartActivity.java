@@ -412,7 +412,7 @@ public class CartActivity
         new AlertDialog.Builder(CartActivity.this)
                 .setMessage(R.string.confirm_cart_remove_product)
                 .setPositiveButton(android.R.string.ok, (dialog, which) -> removeCartItem(position))
-                .setNegativeButton(android.R.string.cancel, (dialog, which) -> {})
+                .setNegativeButton(android.R.string.cancel, (dialog, which) -> mCartItemAdapter.notifyItemChanged(position))
                 .show();
     }
 
