@@ -104,13 +104,20 @@ public class MapActivity extends AppCompatActivity {
             fusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
                 if (location != null && vietMapGL != null) {
                     LatLng userLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+
+                    // 🔹 Di chuyển camera tới vị trí
                     vietMapGL.animateCamera(vn.vietmap.vietmapsdk.camera.CameraUpdateFactory.newLatLngZoom(userLatLng, 15));
+
+                    // ✅ Thêm Marker tại vị trí hiện tại
+                    vietMapGL.addMarker(new MarkerOptions()
+                            .position(userLatLng)
+                            .title("Vị trí của tôi")
+                            .snippet("Đây là vị trí hiện tại của bạn"));
                 } else {
                     Toast.makeText(this, "Không thể lấy vị trí hiện tại", Toast.LENGTH_SHORT).show();
                 }
             });
         });
-
     }
 
     @Override
