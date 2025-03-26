@@ -7,8 +7,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -68,7 +66,7 @@ public class RegisterActivity extends AppCompatActivity {
         mPassword = findViewById(R.id.editText_Password);
         mConfirmPassword = findViewById(R.id.editText_ConfirmPassword);
         mStatus = findViewById(R.id.textView_Status);
-        findViewById(R.id.button_Register).setOnClickListener(v -> onRegister());
+        findViewById(R.id.button_Submit).setOnClickListener(v -> onRegister());
         findViewById(R.id.textView_ToLogin).setOnClickListener(v -> {
             finish();
         });

@@ -14,7 +14,6 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.prm392mnlv.R;
 import com.example.prm392mnlv.data.dto.request.RegisterConfirmationRequest;
 import com.example.prm392mnlv.data.dto.request.ResendOtpRequest;
-import com.example.prm392mnlv.data.dto.response.LoginResponse;
 import com.example.prm392mnlv.data.dto.response.MessageResponse;
 import com.example.prm392mnlv.retrofit.repositories.AuthManager;
 
@@ -50,8 +49,9 @@ public class RegisterConfirmationActivity extends AppCompatActivity {
         mOtp = findViewById(R.id.editText_Otp);
         mStatus = findViewById(R.id.textView_Status);
         authManager = new AuthManager();
-        findViewById(R.id.button_Register).setOnClickListener(v -> onRegisterConfirm());
+        findViewById(R.id.button_Submit).setOnClickListener(v -> onRegisterConfirm());
         findViewById(R.id.button_ResendOtp).setOnClickListener(v -> onResendConfirmationEmail());
+        findViewById(R.id.imageView_Back).setOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
     }
 
 
@@ -83,7 +83,6 @@ public class RegisterConfirmationActivity extends AppCompatActivity {
 
     private void onResendConfirmationEmail(){
         ResendOtpRequest request = new ResendOtpRequest(mEmail.getText().toString());
-
         Callback<MessageResponse> callback = new Callback<>() {
             @Override
             public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {

@@ -31,7 +31,9 @@ android {
 }
 
 dependencies {
-
+    implementation(libs.navigation.fragment.ktx) // Or the latest version
+    implementation(libs.navigation.ui.ktx)
+    implementation (libs.navigation.compose)
     implementation(libs.core)
     implementation(libs.appcompat)
     implementation(libs.material)
