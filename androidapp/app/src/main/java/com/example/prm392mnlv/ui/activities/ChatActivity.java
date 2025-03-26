@@ -21,6 +21,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
+
 public class ChatActivity extends AppCompatActivity {
 
     private RecyclerView recyclerViewMessages;
@@ -38,6 +40,16 @@ public class ChatActivity extends AppCompatActivity {
 
         String token = TokenManager.INSTANCE.getTokenBlocking(TokenManager.ACCESS_TOKEN);
         TokenHelper.setToken(token);
+
+        String userId = TokenHelper.getUserId().toUpperCase();
+        String name = TokenHelper.getEmail().split("@")[0];
+        String email = TokenHelper.getEmail();
+        String phone = "0123456789";
+        String role = TokenHelper.getRole();
+        String address = "Chưa cập nhật";
+
+        ensureUserExists(userId, name, email, phone, role, address);
+
         // Lấy userId từ JWT token
         currentUserId = TokenHelper.getUserId();
         if (currentUserId != null) {
@@ -95,4 +107,32 @@ public class ChatActivity extends AppCompatActivity {
             return userId2 + "_" + userId1;
         }
     }
+
+    private void ensureUserExists(String userId, String name, String email, String phone, String role, String address) {
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
+
+        userRef.addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.exists()) {
+                    // Chưa có -> tạo mới
+                    HashMap<String, Object> newUser = new HashMap<>();
+                    newUser.put("id", userId);
+                    newUser.put("name", name);
+                    newUser.put("email", email);
+                    newUser.put("phoneNumber", phone);
+                    newUser.put("role", role);
+                    newUser.put("shippingAddress", address);
+
+                    userRef.setValue(newUser);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Có thể log lỗi nếu cần
+            }
+        });
+    }
+
 }

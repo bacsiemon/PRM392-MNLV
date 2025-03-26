@@ -30,21 +30,22 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
     @Override
     public int getItemViewType(int position) {
-        if (messages.get(position).getSenderId().equals(currentUserId)) {
-            return 1; // Tin nhắn của chính mình
+        Message message = messages.get(position);
+        if (message.getSenderId().equals(currentUserId)) {
+            return 1; // RIGHT (mình gửi)
         } else {
-            return 0; // Tin nhắn của người khác (staff)
+            return 0; // LEFT (người còn lại)
         }
     }
 
     @NonNull
     @Override
     public MessageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        int layoutId = (viewType == 1)
+        int layout = (viewType == 1)
                 ? R.layout.item_message_right
                 : R.layout.item_message_left;
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(layout, parent, false);
         return new MessageViewHolder(view);
     }
 
