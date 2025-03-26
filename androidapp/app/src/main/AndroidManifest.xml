@@ -84,6 +84,13 @@
         <activity
             android:name=".ui.activities.MapActivity"
             android:exported="false" />
+        <activity android:name=".ui.activities.LogoutActivity" />
+        <activity
+            android:name=".ui.activities.ChatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.MemberListActivity"
+            android:exported="false" />
         <service
             android:name="vn.vietmap.services.android.navigation.v5.navigation.NavigationService"
             android:enabled="true"

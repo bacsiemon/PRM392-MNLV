@@ -9,30 +9,32 @@ import androidx.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
 
 public class User implements Parcelable {
+    private String id;
     private String name;
     private String email;
     private String phoneNumber;
     private String shippingAddress;
+    private String role;
 
     public User() {}
 
     protected User(@NonNull Parcel in) {
+        id = in.readString();
         name = in.readString();
         email = in.readString();
         phoneNumber = in.readString();
         shippingAddress = in.readString();
+        role = in.readString();
     }
 
     public static final Creator<User> CREATOR = new Creator<>() {
         @NonNull
-        @Contract("_ -> new")
         @Override
         public User createFromParcel(Parcel in) {
             return new User(in);
         }
 
         @NonNull
-        @Contract(value = "_ -> new", pure = true)
         @Override
         public User[] newArray(int size) {
             return new User[size];
@@ -40,16 +42,29 @@ public class User implements Parcelable {
     };
 
     @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(id);
         dest.writeString(name);
         dest.writeString(email);
         dest.writeString(phoneNumber);
         dest.writeString(shippingAddress);
+        dest.writeString(role);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    // Getters & Setters
+
+    @NonNull
+    public String getId() {
+        return id;
+    }
+
+    public void setId(@NonNull String id) {
+        this.id = id;
     }
 
     @NonNull
@@ -86,5 +101,14 @@ public class User implements Parcelable {
 
     public void setShippingAddress(@Nullable String shippingAddress) {
         this.shippingAddress = shippingAddress;
+    }
+
+    @NonNull
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(@NonNull String role) {
+        this.role = role;
     }
 }

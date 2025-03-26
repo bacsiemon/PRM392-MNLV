@@ -39,6 +39,8 @@ import com.example.prm392mnlv.data.models.Product;
 import com.example.prm392mnlv.retrofit.repositories.CartItemRepository;
 import com.example.prm392mnlv.retrofit.repositories.CategoryRepository;
 import com.example.prm392mnlv.retrofit.repositories.ProductRepository;
+import com.example.prm392mnlv.stores.TokenManager;
+import com.example.prm392mnlv.ui.adapters.CartCartItemAdapter;
 import com.example.prm392mnlv.ui.adapters.CartItemAdapter;
 import com.example.prm392mnlv.ui.adapters.CartItemTouchCallback;
 import com.example.prm392mnlv.util.LogHelper;
@@ -98,6 +100,8 @@ public class CartActivity
                         100);
             }
         }
+
+
         
         mCartItemRepo = new CartItemRepository();
         mProductRepo = new ProductRepository();
@@ -203,7 +207,7 @@ public class CartActivity
 
     private void fetchCategoryInfo() {
         Set<String> categoryIds = mCartItems.stream()
-                .map(e -> e.getProduct() != null ? e.getProduct().getCategoryId() : null)
+                .map(e -> e.getProduct() != null ? e.getProduct().getCategoryName() : null)
                 .collect(Collectors.toSet());
         categoryIds.remove(null);
 
@@ -226,7 +230,7 @@ public class CartActivity
                 Category category = CategoryMapper.INSTANCE.toModel(categoryDTOs.get(0));
                 mCartItems.forEach(cartItem -> {
                     Product product = cartItem.getProduct();
-                    if (product != null && category.getId().equals(product.getCategoryId())) {
+                    if (product != null && category.getId().equals(product.getCategoryName())) {
                         product.setCategory(category);
                     }
                 });

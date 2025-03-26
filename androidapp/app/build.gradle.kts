@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -76,6 +77,8 @@ dependencies {
     implementation ("com.github.vietmap-company:vietmap-services-geojson-android:1.0.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.0.0-beta4")
     implementation ("org.json:json:20210307")
+
+    implementation("com.google.firebase:firebase-database:20.3.0")
 
     // Sử dụng Glide từ version catalog
     implementation(libs.glide)
