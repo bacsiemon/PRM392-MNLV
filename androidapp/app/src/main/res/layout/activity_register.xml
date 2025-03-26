@@ -99,7 +99,7 @@
         app:layout_constraintTop_toBottomOf="@+id/editText_ConfirmPassword" />
 
     <Button
-        android:id="@+id/button_Register"
+        android:id="@+id/button_Submit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="200dp"

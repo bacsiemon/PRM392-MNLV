@@ -24,6 +24,9 @@
         <activity
             android:name=".ui.activities.OrderSummaryActivity"
             android:exported="false" />
+       <activity
+            android:name=".ui.activities.ForgotPasswordActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.activities.RegisterConfirmationActivity"
             android:exported="false" />
@@ -55,9 +58,6 @@
             android:name=".ui.activities.HomeActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.LoginActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.activities.RegisterActivity"
             android:exported="false" />
         <activity
@@ -70,7 +70,7 @@
             android:name=".ui.activities.SearchActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.SplashActivity"
+            android:name=".ui.activities.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -87,6 +87,7 @@
         <activity
             android:name=".ui.activities.MemberListActivity"
             android:exported="false" />
+
         <service
             android:name="vn.vietmap.services.android.navigation.v5.navigation.NavigationService"
             android:enabled="true"

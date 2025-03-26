@@ -30,7 +30,7 @@
     <string name="INVALID_EMAIL_OR_NOT_CONFIRMED">Email is invalid or not confirmed</string>
     <string name="ERR_EMAIL_NOT_FOUND">Email not found.</string>
     <string name="ERR_INVALID_PASSWORD">Password must contain at least 8 characters, 1 uppercase, 1 lowercase, 1 number and 1 special character</string>
-
+    <string name="OTP_SENT">OTP has been sent to your email.</string>
     <string name="REGISTER_CONFIRMATION_MAIL_SENT">A confirmation code has been sent to your email.</string>
     <string name="WELCOME_BACK">Welcome back!</string>
     <string name="PLEASE_LOG_IN">Log in to continue</string>
@@ -39,6 +39,7 @@
     <string name="CONFIRM_YOUR_EMAIL">Confirm Your Email</string>
     <string name="REGISTER_ENTER_OTP">Enter the OTP sent to your email to finish registration</string>
     <string name="EMAIL_CONFIRMATION_SUCCESS">Email confirmation successful</string>
+    <string name="FORGOT_PASSWORD_SUCCESS">Reset password successful. Logging in.</string>
     <string name="OTP">OTP</string>
     <string name="RESEND">Resend</string>
     <string name="VERIFY">VERIFY</string>
@@ -53,10 +54,15 @@
     <string name="ERR_PHONE_NUMBER_INVALID">Phone number is invalid</string>
     <string name="ERR_PASSWORD_EMPTY">Password cannot be empty</string>
     <string name="ERR_PASSWORD_NOT_MATCH">Confirm password does not match</string>
+    <string name="FORGOT_PASSWORD">Forgot Password?</string>
+    <string name="RESET_YOUR_PASSWORD">Reset your password</string>
+    <string name="INCORRECT_OTP">Incorrect OTP. Please try again.</string>
+    <string name="GET_OTP">Get OTP</string>
     <string name="HOME">Home</string>
     <string name="NOTIFICATION">Notification</string>
     <string name="ACCOUNT">Account</string>
     <string name="MAP">Map</string>
+    <string name="SUBMIT">Submit</string>
     <string name="shipping_address">Shipping Address</string>
     <string name="set_shipping_address">To set shipping address page</string>
     <string name="placeholder_product_name">PRODUCT NAME</string>
@@ -107,4 +113,5 @@
     <string name="btn_add_to_cart">Add to Cart</string>
     <string name="btn_view_details">View details</string>
     <string name="btn_buy_now">Buy now!</string>
+    <string name="success_login">Success</string>
 </resources>

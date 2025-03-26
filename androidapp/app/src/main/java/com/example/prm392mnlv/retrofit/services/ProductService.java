@@ -3,6 +3,7 @@ package com.example.prm392mnlv.retrofit.services;
 import androidx.annotation.Nullable;
 
 import com.example.prm392mnlv.data.dto.response.ProductResponse;
+import com.example.prm392mnlv.data.models.Category;
 import com.example.prm392mnlv.retrofit.json.JsonPath;
 
 import java.util.List;
@@ -21,4 +22,6 @@ public interface ProductService {
                                             @Query("categoryname") @Nullable String categoryName,
                                             @Query("pageIndex") int pageIndex,
                                             @Query("pageSize") int pageSize);
+    @GET("category")
+    Call<List<Category>> getCategories();
 }
