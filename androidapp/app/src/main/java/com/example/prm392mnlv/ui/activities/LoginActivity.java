@@ -51,7 +51,6 @@ public class LoginActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
         String accessToken = TokenManager.INSTANCE.getTokenBlocking(TokenManager.ACCESS_TOKEN);
         if (!accessToken.isEmpty()) {
             Intent homeIntent = new Intent();
@@ -76,6 +75,7 @@ public class LoginActivity extends AppCompatActivity {
         findViewById(R.id.button_Login).setOnClickListener(v -> onLogin());
         findViewById(R.id.textView_ToLogin).setOnClickListener(v -> toRegister());
         findViewById(R.id.textView_ToEmailConfirmation).setOnClickListener(v -> toEmailConfirmation());
+        findViewById(R.id.textView_ToForgotPassword).setOnClickListener(v -> toForgotPassword());
     }
 
     private void onLogin() {
@@ -160,7 +160,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void toRegister() {
-        onPause();
         Intent intent = new Intent();
         intent.setClass(this, RegisterActivity.class);
         getContent.launch(intent);
@@ -186,4 +185,27 @@ public class LoginActivity extends AppCompatActivity {
         intent.putExtra("Email", mEmail.getText().toString().trim());
         startActivity(intent);
     }
+
+
+    private void toForgotPassword() {
+        Intent intent = new Intent();
+        intent.setClass(this, ForgotPasswordActivity.class);
+        getForgotPasswordResult.launch(intent);
+    }
+
+    private ActivityResultLauncher<Intent> getForgotPasswordResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                try {
+                    if (result.getResultCode() == LoginActivity.RESULT_OK) {
+                        String email = result.getData().getStringExtra("Email");
+                        String password = result.getData().getStringExtra("Password");
+                        mEmail.setText(email == null ? "" : email);
+                        mPassword.setText(password == null ? "" : password);
+                        onLogin();
+                    }
+                } catch (Exception ex) {
+                }
+            });
+
+
 }

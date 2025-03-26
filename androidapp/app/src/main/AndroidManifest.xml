@@ -24,6 +24,9 @@
         <activity
             android:name=".ui.activities.OrderSummaryActivity"
             android:exported="false" />
+       <activity
+            android:name=".ui.activities.ForgotPasswordActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.activities.RegisterConfirmationActivity"
             android:exported="false" />
