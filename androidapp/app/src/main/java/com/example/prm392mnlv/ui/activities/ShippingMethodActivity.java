@@ -80,9 +80,7 @@ public class ShippingMethodActivity extends AppCompatActivity {
                 tvEstimatedDelivery.setTypeface(null, Typeface.NORMAL);
             }
 
-            if (method.getId() == mSelected) {
-                rbSelect.setChecked(true);
-            }
+            rbSelect.setId(method.getId());
 
             view.setOnClickListener(v -> {
                 rbSelect.setChecked(true);
@@ -91,6 +89,8 @@ public class ShippingMethodActivity extends AppCompatActivity {
 
             mRgShippingMethods.addView(view);
         }
+
+        mRgShippingMethods.check(mSelected);
 
         findViewById(R.id.btnConfirm).setOnClickListener(v -> {
             Intent result = new Intent();

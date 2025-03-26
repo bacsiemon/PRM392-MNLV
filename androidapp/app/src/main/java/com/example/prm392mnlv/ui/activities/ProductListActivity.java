@@ -1,23 +1,26 @@
 package com.example.prm392mnlv.ui.activities;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.prm392mnlv.R;
 import com.example.prm392mnlv.data.dto.response.ProductResponse;
 import com.example.prm392mnlv.data.mappings.ProductMapper;
+import com.example.prm392mnlv.data.models.MenuItem;
 import com.example.prm392mnlv.data.models.Product;
 import com.example.prm392mnlv.retrofit.repositories.ProductRepository;
-import com.example.prm392mnlv.stores.TokenManager;
+import com.example.prm392mnlv.ui.adapters.MenuAdapter;
 import com.example.prm392mnlv.ui.adapters.ProductAdapter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import retrofit2.Call;
@@ -26,8 +29,9 @@ import retrofit2.Response;
 
 public class ProductListActivity extends AppCompatActivity {
     private RecyclerView rvProducts;
+    private RecyclerView menuRecyclerView;
     private ProductAdapter productAdapter;
-    private List<Product> productList = new ArrayList<>();
+    private final List<Product> productList = new ArrayList<>();
     private ProductRepository productRepository;
 
     @Override
@@ -35,11 +39,8 @@ public class ProductListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_list);
 
-        // Lấy token từ TokenManager
-        String token = TokenManager.INSTANCE.getTokenBlocking(TokenManager.ACCESS_TOKEN);
-        Log.d("ProductListActivity", "Token: " + token);
-        // Hiển thị token (tùy chọn)
-        Toast.makeText(this, "Token: " + token, Toast.LENGTH_SHORT).show();
+        menuRecyclerView = findViewById(R.id.menuRecyclerView);
+        setupMenu();
 
         // Khởi tạo RecyclerView
         rvProducts = findViewById(R.id.rvProducts);
@@ -59,6 +60,7 @@ public class ProductListActivity extends AppCompatActivity {
     private void fetchProducts() {
         // Nếu không có điều kiện filter thì truyền null
         productRepository.getProducts(null, null, null, new Callback<List<ProductResponse>>() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<List<ProductResponse>> call, Response<List<ProductResponse>> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -84,5 +86,19 @@ public class ProductListActivity extends AppCompatActivity {
                 Log.e("ProductListActivity", "Lỗi khi gọi API: " + t.getMessage());
             }
         });
+    }
+
+    private void setupMenu() {
+        menuRecyclerView.setLayoutManager(new GridLayoutManager(this, 3)); // 3 cột
+
+        List<MenuItem> menuList = Arrays.asList(
+                new MenuItem("Cart", R.drawable.ic_cart),
+                new MenuItem("Map", R.drawable.ic_map),
+                new MenuItem("Logout", R.drawable.ic_logout),
+                new MenuItem("Chat", R.drawable.ic_chat)
+        );
+
+        MenuAdapter adapter = new MenuAdapter(menuList, this);
+        menuRecyclerView.setAdapter(adapter);
     }
 }

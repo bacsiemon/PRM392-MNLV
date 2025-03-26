@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PRM392MNLV</string>
+    <string name="app_name">Milk Store</string>
     <string name="product_image">Product image</string>
     <string name="decrease_quantity">Decrease quantity</string>
     <string name="increase_quantity">Increase quantity</string>
@@ -18,7 +18,7 @@
     <string name="confirm__cart_remove_selected_products">Really remove these products?</string>
     <string name="confirm_cart_remove_product">Really remove this product?</string>
     <string name="err_product_removal_failed">Some items could not be removed</string>
-    <string name="checkout">Checkout</string>
+    <string name="checkout">Check out</string>
     <string name="NAME">Name</string>
     <string name="EMAIL">Email</string>
     <string name="PHONE_NUMBER">Phone Number</string>
@@ -69,9 +69,9 @@
     <string name="cart_title">Cart</string>
     <string name="total_product_price">Total product price</string>
     <string name="total_shipping_fee">Total shipping fee</string>
-    <string name="grand_total">Grand total</string>
+    <string name="order_total">Grand total</string>
     <string name="checkout_title">Confirm order</string>
-    <string name="order_summary_total">Total:</string>
+    <string name="order_total_footer">Total:</string>
     <string name="place_order">Place order</string>
     <string name="address_hint">Street address, district, city</string>
     <string name="select_address_prompt">Use another address</string>
@@ -96,4 +96,15 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="err_auth_return_home">An error has occurred. Returning to home screen.</string>
     <string name="err_shipping_addr_update_failed">Could not update shipping address</string>
+    <string name="order_placed_title">Thank you for your order!</string>
+    <string name="order_placed_subtitle">Your order was successfully placed\nWe will process it shortly</string>
+    <string name="estimated_delivery_summary">Delivered by</string>
+    <string name="shipping_method_summary">Shipping</string>
+    <string name="payment_method_summary">Payment method</string>
+    <string name="order_total_summary">Order total</string>
+    <string name="err_product_details_add_to_cart_failed">Could not add products to cart.</string>
+    <string name="success_product_details_add_to_cart">Successfully added to cart.</string>
+    <string name="btn_add_to_cart">Add to Cart</string>
+    <string name="btn_view_details">View details</string>
+    <string name="btn_buy_now">Buy now!</string>
 </resources>

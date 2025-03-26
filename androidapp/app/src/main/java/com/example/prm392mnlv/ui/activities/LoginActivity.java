@@ -55,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
         String accessToken = TokenManager.INSTANCE.getTokenBlocking(TokenManager.ACCESS_TOKEN);
         if (!accessToken.isEmpty()) {
             Intent homeIntent = new Intent();
-            homeIntent.setClass(this, CartActivity.class);
+            homeIntent.setClass(this, ProductListActivity.class);
             startActivity(homeIntent);
             finish();
         } else {
@@ -119,9 +119,17 @@ public class LoginActivity extends AppCompatActivity {
         TokenManager.INSTANCE.setTokenBlocking(TokenManager.ACCESS_TOKEN, response.accessToken);
         TokenManager.INSTANCE.setTokenBlocking(TokenManager.REFRESH_TOKEN, response.refreshToken);
         TokenHelper.setToken(response.accessToken);
-        Intent homeIntent = new Intent();
-        homeIntent.setClass(this, CartActivity.class);
-        startActivity(homeIntent);
+
+        String role = TokenHelper.getRole();
+
+        Intent intent;
+        if ("Staff".equalsIgnoreCase(role)) {
+            intent = new Intent(this, MemberListActivity.class);
+        } else {
+            intent = new Intent(this, ProductListActivity.class);
+        }
+
+        startActivity(intent);
         finish();
     }
 
