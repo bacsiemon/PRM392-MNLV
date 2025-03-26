@@ -12,9 +12,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.prm392mnlv.R;
-import com.example.prm392mnlv.ui.activities.*;
-
 import com.example.prm392mnlv.data.models.MenuItem;
+import com.example.prm392mnlv.ui.activities.CartActivity;
+import com.example.prm392mnlv.ui.activities.ChatActivity;
+import com.example.prm392mnlv.ui.activities.LogoutActivity;
+import com.example.prm392mnlv.ui.activities.MapActivity;
 import com.example.prm392mnlv.util.TokenHelper;
 
 import java.util.List;
