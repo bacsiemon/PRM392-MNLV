@@ -16,6 +16,7 @@ import com.example.prm392mnlv.data.models.MenuItem;
 import com.example.prm392mnlv.ui.activities.CartActivity;
 import com.example.prm392mnlv.ui.activities.LogoutActivity;
 import com.example.prm392mnlv.ui.activities.MapActivity;
+import com.example.prm392mnlv.util.TokenHelper;
 
 import java.util.List;
 
@@ -51,6 +52,11 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
                     break;
                 case "Map":
                     context.startActivity(new Intent(context, MapActivity.class));
+                    break;
+                case "Chat":
+                        Intent intent = new Intent(context, ChatActivity.class);
+                        intent.putExtra("receiverId", "7423B0F5-D9E5-42E6-79B0-08DD644E8FA6");
+                        context.startActivity(intent);
                     break;
             }
         });

@@ -163,7 +163,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
     public void onDestroy() {
         mDisposables.dispose();
     }
-
+    
     public class CartItemHolder extends RecyclerView.ViewHolder {
         private final CheckBox mCbSelectItem;
         private final ImageView mIvProductImage;

@@ -45,45 +45,46 @@ public class BearerTokenAuthenticator implements Authenticator {
     @Nullable
     @Override
     public Request authenticate(Route route, @NonNull Response response) {
-        if (mCondition != null && !mCondition.test(response.request())) {
-            return null;
-        }
-
-        if (response.request().url().encodedPath().endsWith(TOKEN_REFRESH_ENDPOINT)) {
-            // We're on the secondary request chain, attempting to refresh our access token.
-            // The server somehow returned a 401. Bail now rather than loop to retry limit.
-            return null;
-        }
-
-        // Check whether our access token expired, or we simply haven't signed in.
-        if (response.request().header("Authorization") == null) {
-            // We haven't signed in.
-            return toLogin();
-        }
-
-        // We'd successfully refreshed the token, but somehow still failed to authenticate.
-        if (retryCount(response) > MAX_RETRIES) {
-            return toLogin();
-        }
-
-        List<Challenge> challenges = response.challenges();
-        if (challenges.isEmpty() || !hasBearerChallenge(challenges)) {
-            return toLogin();
-        }
-
-        String refreshToken = TokenManager.INSTANCE.getTokenBlocking(TokenManager.REFRESH_TOKEN);
-        if (refreshToken.isEmpty()) {
-            return toLogin();
-        }
-
-        String newAccessToken = refreshToken(refreshToken);
-        if (newAccessToken == null) {
-            return toLogin();
-        }
-
-        return response.request().newBuilder()
-                .header("Authorization", "Bearer " + newAccessToken)
-                .build();
+        return toLogin();
+//        if (mCondition != null && !mCondition.test(response.request())) {
+//            return null;
+//        }
+//
+//        if (response.request().url().encodedPath().endsWith(TOKEN_REFRESH_ENDPOINT)) {
+//            // We're on the secondary request chain, attempting to refresh our access token.
+//            // The server somehow returned a 401. Bail now rather than loop to retry limit.
+//            return null;
+//        }
+//
+//        // Check whether our access token expired, or we simply haven't signed in.
+//        if (response.request().header("Authorization") == null) {
+//            // We haven't signed in.
+//            return toLogin();
+//        }
+//
+//        // We'd successfully refreshed the token, but somehow still failed to authenticate.
+//        if (retryCount(response) > MAX_RETRIES) {
+//            return toLogin();
+//        }
+//
+//        List<Challenge> challenges = response.challenges();
+//        if (challenges.isEmpty() || !hasBearerChallenge(challenges)) {
+//            return toLogin();
+//        }
+//
+//        String refreshToken = TokenManager.INSTANCE.getTokenBlocking(TokenManager.REFRESH_TOKEN);
+//        if (refreshToken.isEmpty()) {
+//            return toLogin();
+//        }
+//
+//        String newAccessToken = refreshToken(refreshToken);
+//        if (newAccessToken == null) {
+//            return toLogin();
+//        }
+//
+//        return response.request().newBuilder()
+//                .header("Authorization", "Bearer " + newAccessToken)
+//                .build();
     }
 
     private int retryCount(@NonNull Response response) {

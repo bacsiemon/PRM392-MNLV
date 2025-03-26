@@ -98,6 +98,8 @@ public class CartActivity
                         100);
             }
         }
+
+
         
         mCartItemRepo = new CartItemRepository();
         mProductRepo = new ProductRepository();

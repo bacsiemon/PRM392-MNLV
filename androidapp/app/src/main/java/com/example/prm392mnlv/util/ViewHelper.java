@@ -37,7 +37,7 @@ public final class ViewHelper {
         view.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
         view.setEnabled(false);
     }
-
+  
     public static void enableClipArtButton(@NonNull ImageView view) {
         // Clip arts have #FFFFFF fill and #000000 filter by default.
         view.setColorFilter(0xFF000000, PorterDuff.Mode.MULTIPLY);
