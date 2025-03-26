@@ -100,7 +100,8 @@ public class ProductListActivity extends AppCompatActivity {
         List<MenuItem> menuList = Arrays.asList(
                 new MenuItem("Cart", R.drawable.ic_cart),
                 new MenuItem("Map", R.drawable.ic_map),
-                new MenuItem("Logout", R.drawable.ic_logout)
+                new MenuItem("Logout", R.drawable.ic_logout),
+                new MenuItem("Chat", R.drawable.ic_chat)
         );
 
         MenuAdapter adapter = new MenuAdapter(menuList, this);
