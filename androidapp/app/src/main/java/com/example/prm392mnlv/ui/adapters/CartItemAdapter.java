@@ -2,7 +2,6 @@ package com.example.prm392mnlv.ui.adapters;
 
 import android.content.Context;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +21,7 @@ import com.example.prm392mnlv.data.models.CartItem;
 import com.example.prm392mnlv.data.models.Product;
 import com.example.prm392mnlv.util.ImageUtils;
 import com.example.prm392mnlv.util.TextUtils;
+import com.example.prm392mnlv.util.ViewHelper;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -33,7 +33,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class CartCartItemAdapter extends RecyclerView.Adapter<CartCartItemAdapter.CartItemHolder>
+public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartItemHolder>
         implements CartItemTouchCallback.CartItemTouchAdapter {
     private final List<CartItem> mItems;
     private final CompositeDisposable mDisposables = new CompositeDisposable();
@@ -52,7 +52,7 @@ public class CartCartItemAdapter extends RecyclerView.Adapter<CartCartItemAdapte
 
     private Listener mListener;
 
-    public CartCartItemAdapter(List<CartItem> items) {
+    public CartItemAdapter(List<CartItem> items) {
         mItems = items;
     }
 
@@ -124,11 +124,15 @@ public class CartCartItemAdapter extends RecyclerView.Adapter<CartCartItemAdapte
 
         holder.mTvQuantity.setText(String.valueOf(item.getQuantity()));
         if (item.getProduct() == null) {
-            setImageViewEnabled(holder.mBtnDecrease, false);
-            setImageViewEnabled(holder.mBtnIncrease, false);
+            ViewHelper.disableClipArtButton(holder.mBtnDecrease);
+            ViewHelper.disableClipArtButton(holder.mBtnIncrease);
         } else {
-            setImageViewEnabled(holder.mBtnDecrease, true);
-            setImageViewEnabled(holder.mBtnIncrease, item.getQuantity() < item.getProduct().getQuantityInStock());
+            ViewHelper.enableClipArtButton(holder.mBtnDecrease);
+            if (item.getQuantity() < item.getProduct().getQuantityInStock()) {
+                ViewHelper.enableClipArtButton(holder.mBtnIncrease);
+            } else {
+                ViewHelper.disableClipArtButton(holder.mBtnIncrease);
+            }
         }
     }
 
@@ -159,17 +163,7 @@ public class CartCartItemAdapter extends RecyclerView.Adapter<CartCartItemAdapte
     public void onDestroy() {
         mDisposables.dispose();
     }
-
-    private void setImageViewEnabled(@NonNull ImageView view, boolean enabled) {
-        view.setEnabled(enabled);
-        if (enabled) {
-            // Clip arts have #FFFFFF fill and #000000 filter by default.
-            view.setColorFilter(0xFF000000, PorterDuff.Mode.MULTIPLY);
-        } else {
-            view.setColorFilter(0xFFAAAAAA, PorterDuff.Mode.MULTIPLY);
-        }
-    }
-
+    
     public class CartItemHolder extends RecyclerView.ViewHolder {
         private final CheckBox mCbSelectItem;
         private final ImageView mIvProductImage;

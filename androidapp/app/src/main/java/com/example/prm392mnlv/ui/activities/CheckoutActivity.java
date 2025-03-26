@@ -10,6 +10,7 @@ import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -100,6 +101,8 @@ public class CheckoutActivity extends AppCompatActivity {
 
     private TextView mTvTotalFooter;
 
+    private ViewGroup mLoadingPanel;
+
     private User mUser;
     private List<CartItem> mCartItems;
     private BigDecimal mSubtotal;
@@ -134,11 +137,13 @@ public class CheckoutActivity extends AppCompatActivity {
         mTvDiscount = findViewById(R.id.tvDiscount);
         mTvGrandTotal = findViewById(R.id.tvGrandTotal);
         mTvTotalFooter = findViewById(R.id.tvTotalFooter);
+        mLoadingPanel = findViewById(R.id.loadingPanel);
+
+        startLoading();
 
         fetchUserInfo();
         initProductList();
         mShippingMethod = ShippingMethods.getMethods().stream().findFirst().orElseThrow();
-        calculateShippingAndSubtotal();
         initPaymentMethods();
         mPaymentMethod = PaymentMethods.getMethods().stream().findFirst().orElseThrow();
         mRgPaymentMethods.check(mPaymentMethod.getId());
@@ -190,6 +195,44 @@ public class CheckoutActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.btnPlaceOrder).setOnClickListener(this::placeOrder);
+    }
+
+    private void startLoading() {
+        mLoadingPanel.setVisibility(View.VISIBLE);
+    }
+
+    private void stopLoading() {
+        mLoadingPanel.setVisibility(View.GONE);
+    }
+
+    private void fetchUserInfo() {
+        mUserRepo.getUserProfile(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<UserProfileResponse> call, @NonNull Response<UserProfileResponse> response) {
+                if (!response.isSuccessful()) {
+                    LogHelper.logErrorResponse(TAG, response);
+                    ViewHelper.showAlert(CheckoutActivity.this, R.string.err_checkout_load_user_address_failed);
+                    return;
+                }
+
+                UserProfileResponse userResponse = response.body();
+                assert userResponse != null;
+                mUser = UserMapper.INSTANCE.toModel(userResponse);
+
+                calculateShippingAndSubtotal();
+                updateUserInfo();
+                updateShippingMethodAndSubtotal();
+                updateSummary();
+
+                stopLoading();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<UserProfileResponse> call, @NonNull Throwable throwable) {
+                LogHelper.logFailure(TAG, throwable);
+                ViewHelper.showAlert(CheckoutActivity.this, R.string.err_checkout_load_user_address_failed);
+            }
+        });
     }
 
     private void initProductList() {
@@ -304,38 +347,6 @@ public class CheckoutActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        updateShippingMethodAndSubtotal();
-        updateSummary();
-    }
-
-    private void fetchUserInfo() {
-        mUserRepo.getUserProfile(new Callback<>() {
-            @Override
-            public void onResponse(@NonNull Call<UserProfileResponse> call, @NonNull Response<UserProfileResponse> response) {
-                if (!response.isSuccessful()) {
-                    LogHelper.logErrorResponse(TAG, response);
-                    ViewHelper.showAlert(CheckoutActivity.this, R.string.err_checkout_load_user_address_failed);
-                    return;
-                }
-
-                UserProfileResponse userResponse = response.body();
-                assert userResponse != null;
-                mUser = UserMapper.INSTANCE.toModel(userResponse);
-
-                updateUserInfo();
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<UserProfileResponse> call, @NonNull Throwable throwable) {
-                LogHelper.logFailure(TAG, throwable);
-                ViewHelper.showAlert(CheckoutActivity.this, R.string.err_checkout_load_user_address_failed);
-            }
-        });
-    }
-
     private void updateUserInfo() {
         mTvUserName.setText(mUser.getName());
         mTvPhoneNumber.setText(TextUtils.formatPhoneNumber(mUser.getPhoneNumber()));
@@ -416,6 +427,7 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     private void createOrder() {
+        startLoading();
         String paymentMethod = PaymentMapper.INSTANCE.toDto(mPaymentMethod);
         String shippingType = ShippingMapper.INSTANCE.toDto(mShippingMethod);
         mOrderRepo.createOrder(paymentMethod, shippingType, new Callback<>() {
@@ -433,7 +445,14 @@ public class CheckoutActivity extends AppCompatActivity {
                     }
                     return;
                 }
-                //TODO: Summary screen
+
+                Intent intent = new Intent(CheckoutActivity.this, OrderSummaryActivity.class);
+                intent.putExtra(OrderSummaryActivity.ORDER_TOTAL_KEY, mGrandTotal);
+                intent.putExtra(OrderSummaryActivity.PAYMENT_METHOD_KEY, mPaymentMethod);
+                intent.putExtra(OrderSummaryActivity.SHIPPING_METHOD_KEY, mShippingMethod);
+                startActivity(intent);
+                stopLoading();
+                finish();
             }
 
             @Override

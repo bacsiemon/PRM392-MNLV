@@ -1,7 +1,12 @@
 package com.example.prm392mnlv.ui.activities;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -34,10 +39,12 @@ import com.example.prm392mnlv.data.models.Product;
 import com.example.prm392mnlv.retrofit.repositories.CartItemRepository;
 import com.example.prm392mnlv.retrofit.repositories.CategoryRepository;
 import com.example.prm392mnlv.retrofit.repositories.ProductRepository;
-import com.example.prm392mnlv.ui.adapters.CartCartItemAdapter;
+import com.example.prm392mnlv.ui.adapters.CartItemAdapter;
 import com.example.prm392mnlv.ui.adapters.CartItemTouchCallback;
 import com.example.prm392mnlv.util.LogHelper;
+import com.example.prm392mnlv.util.NotificationHelper;
 import com.example.prm392mnlv.util.TextUtils;
+import com.example.prm392mnlv.util.ViewHelper;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -54,7 +61,7 @@ import retrofit2.Response;
 
 public class CartActivity
         extends AppCompatActivity
-        implements CartCartItemAdapter.Listener {
+        implements CartItemAdapter.Listener {
 
     private static final String TAG = "CartActivity";
 
@@ -63,7 +70,7 @@ public class CartActivity
     private CategoryRepository mCategoryRepo;
 
     private List<CartItem> mCartItems;
-    private CartCartItemAdapter mCartItemAdapter;
+    private CartItemAdapter mCartItemAdapter;
 
     private TextView mTvCartTitle;
     private RecyclerView mRvCartItems;
@@ -83,6 +90,17 @@ public class CartActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.POST_NOTIFICATIONS},
+                        100);
+            }
+        }
+
+
+        
         mCartItemRepo = new CartItemRepository();
         mProductRepo = new ProductRepository();
         mCategoryRepo = new CategoryRepository();
@@ -101,10 +119,14 @@ public class CartActivity
         mRvCartItems.setVisibility(View.VISIBLE);
         mLayoutError.setVisibility(View.GONE);
 
-        mCbSelectAll.setOnCheckedChangeListener(this::onSelectAll);
         findViewById(R.id.ivEdit).setOnClickListener(this::toggleDeleteMode);
-        mBtnCheckout.setOnClickListener(this::onCheckout);
         mBtnDelete.setOnClickListener(this::onDelete);
+        mCbSelectAll.setOnCheckedChangeListener(this::onSelectAll);
+        mBtnCheckout.setOnClickListener(this::onCheckout);
+
+        ViewHelper.disable(mBtnDelete);
+        ViewHelper.disable(mCbSelectAll);
+        ViewHelper.disable(mBtnCheckout);
     }
 
     @Override
@@ -183,7 +205,7 @@ public class CartActivity
 
     private void fetchCategoryInfo() {
         Set<String> categoryIds = mCartItems.stream()
-                .map(e -> e.getProduct() != null ? e.getProduct().getCategoryId() : null)
+                .map(e -> e.getProduct() != null ? e.getProduct().getCategoryName() : null)
                 .collect(Collectors.toSet());
         categoryIds.remove(null);
 
@@ -206,7 +228,7 @@ public class CartActivity
                 Category category = CategoryMapper.INSTANCE.toModel(categoryDTOs.get(0));
                 mCartItems.forEach(cartItem -> {
                     Product product = cartItem.getProduct();
-                    if (product != null && category.getId().equals(product.getCategoryId())) {
+                    if (product != null && category.getId().equals(product.getCategoryName())) {
                         product.setCategory(category);
                     }
                 });
@@ -244,8 +266,11 @@ public class CartActivity
     private void showCartItems() {
         mRvCartItems.setVisibility(View.VISIBLE);
         mLayoutError.setVisibility(View.GONE);
+        ViewHelper.enable(mBtnDelete);
+        ViewHelper.enable(mCbSelectAll);
+        ViewHelper.enable(mBtnCheckout);
 
-        mCartItemAdapter = new CartCartItemAdapter(mCartItems);
+        mCartItemAdapter = new CartItemAdapter(mCartItems);
         mRvCartItems.setAdapter(mCartItemAdapter);
         ItemTouchHelper.Callback callback = new CartItemTouchCallback(mCartItemAdapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
@@ -484,4 +509,15 @@ public class CartActivity
             mCartItemAdapter.onDestroy();
         }
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mCartItems != null && !mCartItems.isEmpty()) {
+            NotificationHelper.showCartNotification(this, mCartItems.size());
+        } else {
+            NotificationHelper.clearBadge(this);
+        }
+    }
+
 }
