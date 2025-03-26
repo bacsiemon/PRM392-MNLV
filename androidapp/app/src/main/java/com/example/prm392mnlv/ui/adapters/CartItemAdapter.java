@@ -19,10 +19,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.prm392mnlv.R;
 import com.example.prm392mnlv.data.models.CartItem;
 import com.example.prm392mnlv.data.models.Product;
-import com.example.prm392mnlv.util.ImageHelper;
-import com.example.prm392mnlv.util.TextHelper;
+import com.example.prm392mnlv.util.ImageUtils;
+import com.example.prm392mnlv.util.TextUtils;
+import com.example.prm392mnlv.util.ViewHelper;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -31,7 +33,8 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartItemHolder> {
+public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartItemHolder>
+        implements CartItemTouchCallback.CartItemTouchAdapter {
     private final List<CartItem> mItems;
     private final CompositeDisposable mDisposables = new CompositeDisposable();
 
@@ -46,6 +49,8 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
 
         void onCartItemDeleted(int position);
     }
+
+    private Listener mListener;
 
     public CartItemAdapter(List<CartItem> items) {
         mItems = items;
@@ -78,14 +83,21 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
                 holder.mTvCategory.setText(product.getCategory().getCategoryName());
             }
 
-            holder.mIvProductImage.setImageDrawable(mLoading);
-            Disposable imgFetch = Flowable.fromSupplier(() -> ImageHelper.fetchDrawable(product.getImageUrl()))
-                    .single(mNoImage)
-                    .onErrorReturnItem(mNoImage)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(holder.mIvProductImage::setImageDrawable);
-            mDisposables.add(imgFetch);
+            if (product.getImageDrawable() != null) {
+                holder.mIvProductImage.setImageDrawable(product.getImageDrawable());
+            } else {
+                holder.mIvProductImage.setImageDrawable(mLoading);
+                Disposable imgFetch = Flowable.fromSupplier(() -> ImageUtils.fetchDrawable(product.getImageUrl()))
+                        .single(mNoImage)
+                        .onErrorReturnItem(mNoImage)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(img -> {
+                            product.setImageDrawable(img);
+                            holder.mIvProductImage.setImageDrawable(img);
+                        });
+                mDisposables.add(imgFetch);
+            }
 
             if (product.getQuantityInStock() <= 0) {
                 holder.mSpnVariant.setVisibility(View.GONE);
@@ -102,17 +114,26 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
             holder.mIvProductImage.setImageDrawable(mNoImage);
         }
 
-        //TODO: Dialog Spinner
-
-        String unitPrice = TextHelper.formatPrice(item.getUnitPrice());
+        String unitPrice = TextUtils.formatPrice(item.getUnitPrice());
         holder.mTvPrice.setText(unitPrice);
 
         BigDecimal fakeOriginalPrice = item.getUnitPrice().multiply(BigDecimal.valueOf(1.25));
-        String originalPrice = TextHelper.formatPrice(fakeOriginalPrice);
+        String originalPrice = TextUtils.formatPrice(fakeOriginalPrice);
         holder.mTvOriginalPrice.setText(originalPrice);
         holder.mTvOriginalPrice.setPaintFlags(holder.mTvOriginalPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
         holder.mTvQuantity.setText(String.valueOf(item.getQuantity()));
+        if (item.getProduct() == null) {
+            ViewHelper.disableClipArtButton(holder.mBtnDecrease);
+            ViewHelper.disableClipArtButton(holder.mBtnIncrease);
+        } else {
+            ViewHelper.enableClipArtButton(holder.mBtnDecrease);
+            if (item.getQuantity() < item.getProduct().getQuantityInStock()) {
+                ViewHelper.enableClipArtButton(holder.mBtnIncrease);
+            } else {
+                ViewHelper.disableClipArtButton(holder.mBtnIncrease);
+            }
+        }
     }
 
     @Override
@@ -120,11 +141,30 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
         return mItems.size();
     }
 
+    @Override
+    public void onItemMove(int fromPosition, int toPosition) {
+        if (fromPosition < toPosition) {
+            for (int i = fromPosition; i < toPosition; ++i) {
+                Collections.swap(mItems, i, i + 1);
+            }
+        } else {
+            for (int i = fromPosition; i > toPosition; --i) {
+                Collections.swap(mItems, i, i - 1);
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition);
+    }
+
+    @Override
+    public void onItemDismiss(int position) {
+        mListener.onCartItemDeleted(position);
+    }
+
     public void onDestroy() {
         mDisposables.dispose();
     }
-
-    public static class CartItemHolder extends RecyclerView.ViewHolder {
+    
+    public class CartItemHolder extends RecyclerView.ViewHolder {
         private final CheckBox mCbSelectItem;
         private final ImageView mIvProductImage;
         private final TextView mTvProductName;
@@ -160,11 +200,11 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
             if (!(context instanceof Listener)) {
                 throw new IllegalStateException("Context must implement " + Listener.class.getName());
             }
-            Listener listener = (Listener) context;
+            mListener = (Listener) context;
 
-            mCbSelectItem.setOnCheckedChangeListener((buttonView, isChecked) -> listener.onCartItemCheckChanged(getBindingAdapterPosition(), isChecked));
-            mBtnDecrease.setOnClickListener(v -> listener.onCartItemQuantityChanged(getBindingAdapterPosition(), -1));
-            mBtnIncrease.setOnClickListener(v -> listener.onCartItemQuantityChanged(getBindingAdapterPosition(), +1));
+            mCbSelectItem.setOnCheckedChangeListener((buttonView, isChecked) -> mListener.onCartItemCheckChanged(getBindingAdapterPosition(), isChecked));
+            mBtnDecrease.setOnClickListener(v -> mListener.onCartItemQuantityChanged(getBindingAdapterPosition(), -1));
+            mBtnIncrease.setOnClickListener(v -> mListener.onCartItemQuantityChanged(getBindingAdapterPosition(), +1));
         }
     }
 }

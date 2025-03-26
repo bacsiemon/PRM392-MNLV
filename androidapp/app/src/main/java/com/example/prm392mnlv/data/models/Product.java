@@ -1,5 +1,6 @@
 package com.example.prm392mnlv.data.models;
 
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -17,9 +18,10 @@ public class Product extends ModelBase implements Parcelable {
     private BigDecimal price;
     private int quantityInStock;
     private Uri imageUrl;
-    private String categoryId;
+    private String categoryName;
 
     private Category category;
+    private Drawable imageDrawable;
 
     public Product() {}
 
@@ -29,7 +31,7 @@ public class Product extends ModelBase implements Parcelable {
         description = in.readString();
         quantityInStock = in.readInt();
         imageUrl = in.readParcelable(Uri.class.getClassLoader());
-        categoryId = in.readString();
+        categoryName = in.readString();
         category = in.readParcelable(Category.class.getClassLoader());
     }
 
@@ -61,7 +63,7 @@ public class Product extends ModelBase implements Parcelable {
         dest.writeString(description);
         dest.writeInt(quantityInStock);
         dest.writeParcelable(imageUrl, flags);
-        dest.writeString(categoryId);
+        dest.writeString(categoryName);
         dest.writeParcelable(category, flags);
     }
 
@@ -110,13 +112,13 @@ public class Product extends ModelBase implements Parcelable {
     }
 
     @NonNull
-    public String getCategoryId() {
-        return categoryId;
+    public String getCategoryName() {
+        return categoryName;
     }
 
 
-    public void setCategoryId(@NonNull String categoryId) {
-        this.categoryId = categoryId;
+    public void setCategoryName(@NonNull String categoryName) {
+        this.categoryName = categoryName;
     }
 
     @Nullable
@@ -126,5 +128,14 @@ public class Product extends ModelBase implements Parcelable {
 
     public void setCategory(@NonNull Category category) {
         this.category = category;
+    }
+
+    @Nullable
+    public Drawable getImageDrawable() {
+        return imageDrawable;
+    }
+
+    public void setImageDrawable(@Nullable Drawable imageDrawable) {
+        this.imageDrawable = imageDrawable;
     }
 }

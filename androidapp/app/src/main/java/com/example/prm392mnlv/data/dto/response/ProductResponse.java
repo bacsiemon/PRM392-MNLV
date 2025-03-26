@@ -9,7 +9,7 @@ public class ProductResponse {
     public final double price;
     public final int quantityInStock;
     public final @NonNull String imageUrl;
-    public final @NonNull String categoryId;
+    public final @NonNull String categoryName;
 
     public ProductResponse(@NonNull String id,
                            @NonNull String productName,
@@ -17,13 +17,13 @@ public class ProductResponse {
                            double price,
                            int quantityInStock,
                            @NonNull String imageUrl,
-                           @NonNull String categoryId) {
+                           @NonNull String categoryName) {
         this.id = id;
         this.productName = productName;
         this.description = description;
         this.price = price;
         this.quantityInStock = quantityInStock;
         this.imageUrl = imageUrl;
-        this.categoryId = categoryId;
+        this.categoryName = categoryName;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.prm392mnlv.ui.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,14 +30,16 @@ import com.example.prm392mnlv.stores.TokenManager;
 import com.example.prm392mnlv.util.LogHelper;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.functions.Consumer;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+@SuppressLint("CustomSplashScreen")
 public class SplashActivity extends AppCompatActivity {
 
     @Override
@@ -51,14 +54,12 @@ public class SplashActivity extends AppCompatActivity {
             return insets;
         });
 
-        runTest();
+//        runTest();
     }
 
     private final CompositeDisposable disposables = new CompositeDisposable();
 
     private void runTest() {
-        TokenManager.init(this);
-
         AuthManager authManager = new AuthManager();
         authManager.login("test@example.com", "My1stPassword!", new Callback<>() {
             private static final String TAG = "LoginTest";
@@ -73,15 +74,17 @@ public class SplashActivity extends AppCompatActivity {
                 LoginResponse loginResponse = response.body();
                 assert loginResponse != null;
 
-                AtomicInteger count = new AtomicInteger();
-                Consumer<Preferences> callback = prefs -> {
-                    if (count.incrementAndGet() < 2) return;
-                    Log.d(TAG, "Access token: " + prefs.get(TokenManager.ACCESS_TOKEN) + "\nRefresh token: " + prefs.get(TokenManager.REFRESH_TOKEN));
-                    fetchData();
-                };
+                Single<Preferences> accessToken = TokenManager.INSTANCE.setTokenNonBlocking(TokenManager.ACCESS_TOKEN, loginResponse.accessToken);
+                Single<Preferences> refreshToken = TokenManager.INSTANCE.setTokenNonBlocking(TokenManager.REFRESH_TOKEN, loginResponse.refreshToken);
 
-                disposables.add(TokenManager.INSTANCE.setToken(TokenManager.ACCESS_TOKEN, loginResponse.accessToken, callback));
-                disposables.add(TokenManager.INSTANCE.setToken(TokenManager.REFRESH_TOKEN, loginResponse.refreshToken, callback));
+                disposables.add(
+                        Single.merge(accessToken, refreshToken)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(prefs -> {
+                                    Log.d(TAG, "Access token: " + prefs.get(TokenManager.ACCESS_TOKEN) + "\nRefresh token: " + prefs.get(TokenManager.REFRESH_TOKEN));
+                                    fetchData();
+                                }));
             }
 
             @Override
@@ -179,10 +182,10 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
         Intent intent = new Intent();
         intent.setClass(getApplicationContext(), LoginActivity.class);
         startActivity(intent);
+        finish();
     }
 
     @Override

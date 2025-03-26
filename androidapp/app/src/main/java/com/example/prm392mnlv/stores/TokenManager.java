@@ -9,11 +9,7 @@ import androidx.datastore.preferences.core.PreferencesKeys;
 import androidx.datastore.preferences.rxjava3.RxPreferenceDataStoreBuilder;
 import androidx.datastore.rxjava3.RxDataStore;
 
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.Consumer;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public enum TokenManager {
     INSTANCE;
@@ -35,7 +31,18 @@ public enum TokenManager {
     public static final Preferences.Key<String> ACCESS_TOKEN = PreferencesKeys.stringKey("access_token");
     public static final Preferences.Key<String> REFRESH_TOKEN = PreferencesKeys.stringKey("refresh_token");
 
-    public boolean setToken(Preferences.Key<String> tokenType, String tokenValue) {
+    @NonNull
+    public String getTokenBlocking(Preferences.Key<String> tokenType) {
+        Single<String> token = mDataStore.data().firstOrError().map(prefs -> prefs.get(tokenType)).onErrorReturnItem("");
+        return token.blockingGet();
+    }
+
+    @NonNull
+    public Single<String> getTokenNonBlocking(Preferences.Key<String> tokenType) {
+        return mDataStore.data().firstOrError().map(prefs -> prefs.get(tokenType)).onErrorReturnItem("");
+    }
+
+    public boolean setTokenBlocking(Preferences.Key<String> tokenType, String tokenValue) {
         Single<Preferences> updateResult = mDataStore.updateDataAsync(prefsIn -> {
             MutablePreferences mutPrefs = prefsIn.toMutablePreferences();
             mutPrefs.set(tokenType, tokenValue);
@@ -46,30 +53,36 @@ public enum TokenManager {
     }
 
     @NonNull
-    public Disposable setToken(Preferences.Key<String> tokenType, String tokenValue, Consumer<Preferences> callback) {
+    public Single<Preferences> setTokenNonBlocking(Preferences.Key<String> tokenType, String tokenValue) {
+        return mDataStore
+                .updateDataAsync(prefsIn -> {
+                    MutablePreferences mutPrefs = prefsIn.toMutablePreferences();
+                    mutPrefs.set(tokenType, tokenValue);
+                    return Single.just(mutPrefs);
+                })
+                .onErrorReturnItem(PREFS_ERROR);
+    }
+
+    public boolean clearTokensBlocking() {
         Single<Preferences> updateResult = mDataStore.updateDataAsync(prefsIn -> {
             MutablePreferences mutPrefs = prefsIn.toMutablePreferences();
-            mutPrefs.set(tokenType, tokenValue);
+            mutPrefs.remove(ACCESS_TOKEN);
+            mutPrefs.remove(REFRESH_TOKEN);
             return Single.just(mutPrefs);
         }).onErrorReturnItem(PREFS_ERROR);
 
-        return updateResult.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(callback);
+        return updateResult.blockingGet() != PREFS_ERROR;
     }
 
     @NonNull
-    public String getToken(Preferences.Key<String> tokenType) {
-        Single<String> token = mDataStore.data().firstOrError().map(prefs -> prefs.get(tokenType)).onErrorReturnItem("");
-        return token.blockingGet();
-    }
-
-    @NonNull
-    public Disposable getToken(Preferences.Key<String> tokenType, Consumer<String> callback) {
-        Single<String> token = mDataStore.data().firstOrError().map(prefs -> prefs.get(tokenType)).onErrorReturnItem("");
-
-        return token.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(callback);
+    public Single<Preferences> clearTokensNonBlocking() {
+        return mDataStore
+                .updateDataAsync(prefsIn -> {
+                    MutablePreferences mutPrefs = prefsIn.toMutablePreferences();
+                    mutPrefs.remove(ACCESS_TOKEN);
+                    mutPrefs.remove(REFRESH_TOKEN);
+                    return Single.just(mutPrefs);
+                })
+                .onErrorReturnItem(PREFS_ERROR);
     }
 }

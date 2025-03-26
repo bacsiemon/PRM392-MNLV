@@ -34,7 +34,8 @@
     <ScrollView
         android:id="@+id/layoutDetails"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/layoutFooter"
         app:layout_constraintTop_toBottomOf="@+id/layoutHeader">
 
         <LinearLayout
@@ -99,7 +100,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="start"
                         android:textColor="@color/gray_dark"
-                        android:textSize="12sp"
+                        android:textSize="13sp"
                         app:layout_constraintEnd_toStartOf="@id/ivChangeAddress"
                         app:layout_constraintStart_toStartOf="@+id/tvUserName"
                         app:layout_constraintTop_toBottomOf="@+id/tvUserName"
@@ -286,7 +287,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <com.example.prm392mnlv.ui.custom.DeepRadioGroup
+                    <com.example.prm392mnlv.ui.views.DeepRadioGroup
                         android:id="@+id/rgPaymentMethods"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -396,13 +397,13 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="sans-serif-medium"
-                                android:text="@string/grand_total"
+                                android:text="@string/order_total"
                                 android:textColor="@color/gray_dark"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
-                                android:id="@+id/tvOrderTotal"
+                                android:id="@+id/tvGrandTotal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="sans-serif-medium"
@@ -418,54 +419,79 @@
         </LinearLayout>
     </ScrollView>
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
+        android:id="@+id/layoutFooter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_cart_summary"
-        android:orientation="horizontal"
-        android:paddingVertical="2dp"
+        app:cardElevation="6dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <TextView
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_cart_summary"
+            android:orientation="horizontal"
+            android:paddingVertical="2dp"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginStart="12dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/order_total_footer"
+                android:textColor="@color/gray_dark"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvTotalFooter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginStart="12dp"
+                android:fontFamily="sans-serif-medium"
+                android:textColor="@color/gray_dark"
+                android:textSize="18sp"
+                tools:text="1.337.000 ₫" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <!-- WARN: ElevatedButton style causes a few warning-level exceptions during rendering -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnPlaceOrder"
+                style="@style/Widget.Material3.Button.ElevatedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="@color/mint"
+                android:gravity="center"
+                android:text="@string/place_order"
+                android:textColor="@color/off_white"
+                android:textSize="18sp"
+                app:cornerRadius="6dp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+
+    <RelativeLayout
+        android:id="@+id/loadingPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white_cloudy"
+        android:elevation="100dp"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical"
-            android:layout_marginStart="12dp"
-            android:fontFamily="sans-serif-medium"
-            android:text="@string/order_summary_total"
-            android:textColor="@color/gray_dark"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:indeterminate="true" />
+    </RelativeLayout>
 
-        <TextView
-            android:id="@+id/tvFooterTotal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical"
-            android:layout_marginStart="12dp"
-            android:fontFamily="sans-serif-medium"
-            android:textColor="@color/gray_dark"
-            android:textSize="18sp"
-            tools:text="1.337.000 ₫" />
-
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
-
-        <!-- WARN: ElevatedButton style causes a few warning-level exceptions during rendering -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnPlaceOrder"
-            style="@style/Widget.Material3.Button.ElevatedButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|center_vertical"
-            android:layout_marginEnd="8dp"
-            android:backgroundTint="@color/coral"
-            android:gravity="center"
-            android:text="@string/place_order"
-            android:textColor="@color/off_white"
-            android:textSize="18sp"
-            app:cornerRadius="6dp" />
-    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
