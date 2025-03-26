@@ -108,93 +108,79 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:background="@drawable/bg_cart_summary"
+            android:orientation="horizontal"
+            android:paddingVertical="2dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <CheckBox
+                android:id="@+id/cbSelectAll"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_cart_summary"
-                android:orientation="horizontal"
-                android:paddingVertical="2dp">
-
-                <CheckBox
-                    android:id="@+id/cbSelectAll"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start|center_vertical"
-                    android:layout_marginStart="8dp"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start|center_vertical"
-                    android:layout_marginStart="4dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:text="@string/cart_all"
-                    android:textColor="@color/gray_dark"
-                    android:textSize="16sp" />
-
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:id="@+id/tvTotalFooter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start|center_vertical"
-                    android:layout_marginEnd="12dp"
-                    android:textColor="@color/gray_dark"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    tools:text="1.337.000 ₫"
-                    tools:visibility="gone" />
-
-                <!-- WARN: ElevatedButton style causes a few warning-level exceptions during rendering -->
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnCheckout"
-                    style="@style/Widget.Material3.Button.ElevatedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end|center_vertical"
-                    android:layout_marginEnd="8dp"
-                    android:backgroundTint="@color/mint"
-                    android:gravity="center"
-                    android:text="@string/checkout"
-                    android:textColor="@color/off_white"
-                    android:textSize="18sp"
-                    app:cornerRadius="6dp"
-                    tools:visibility="gone" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnDelete"
-                    style="@style/Widget.Material3.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end|center_vertical"
-                    android:layout_marginEnd="8dp"
-                    android:gravity="center"
-                    android:text="@string/delete"
-                    android:textColor="@color/coral"
-                    android:textSize="18sp"
-                    android:visibility="gone"
-                    app:cornerRadius="6dp"
-                    app:rippleColor="@color/coral_translucent"
-                    app:strokeColor="@color/coral"
-                    tools:visibility="visible" />
-            </LinearLayout>
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginStart="8dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp" />
 
             <TextView
-                android:id="@+id/layoutNavBar"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                tools:gravity="center"
-                tools:paddingVertical="10dp"
-                tools:text="NAV BAR" />
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginStart="4dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/cart_all"
+                android:textColor="@color/gray_dark"
+                android:textSize="16sp" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/tvTotalFooter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginEnd="12dp"
+                android:textColor="@color/gray_dark"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:text="1.337.000 ₫"
+                tools:visibility="gone" />
+
+            <!-- WARN: ElevatedButton style causes a few warning-level exceptions during rendering -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCheckout"
+                style="@style/Widget.Material3.Button.ElevatedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="@color/mint"
+                android:gravity="center"
+                android:text="@string/checkout"
+                android:textColor="@color/off_white"
+                android:textSize="18sp"
+                app:cornerRadius="6dp"
+                tools:visibility="gone" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnDelete"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="8dp"
+                android:gravity="center"
+                android:text="@string/delete"
+                android:textColor="@color/coral"
+                android:textSize="18sp"
+                android:visibility="gone"
+                app:cornerRadius="6dp"
+                app:rippleColor="@color/coral_translucent"
+                app:strokeColor="@color/coral"
+                tools:visibility="visible" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

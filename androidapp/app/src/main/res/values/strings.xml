@@ -18,7 +18,7 @@
     <string name="confirm__cart_remove_selected_products">Really remove these products?</string>
     <string name="confirm_cart_remove_product">Really remove this product?</string>
     <string name="err_product_removal_failed">Some items could not be removed</string>
-    <string name="checkout">Checkout</string>
+    <string name="checkout">Check out</string>
     <string name="NAME">Name</string>
     <string name="EMAIL">Email</string>
     <string name="PHONE_NUMBER">Phone Number</string>
@@ -102,4 +102,9 @@
     <string name="shipping_method_summary">Shipping</string>
     <string name="payment_method_summary">Payment method</string>
     <string name="order_total_summary">Order total</string>
+    <string name="err_product_details_add_to_cart_failed">Could not add products to cart.</string>
+    <string name="success_product_details_add_to_cart">Successfully added to cart.</string>
+    <string name="btn_add_to_cart">Add to Cart</string>
+    <string name="btn_view_details">View details</string>
+    <string name="btn_buy_now">Buy now!</string>
 </resources>

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.view.View;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
@@ -34,6 +35,17 @@ public final class ViewHelper {
 
     public static void disable(@NonNull View view) {
         view.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
+        view.setEnabled(false);
+    }
+  
+    public static void enableClipArtButton(@NonNull ImageView view) {
+        // Clip arts have #FFFFFF fill and #000000 filter by default.
+        view.setColorFilter(0xFF000000, PorterDuff.Mode.MULTIPLY);
+        view.setEnabled(true);
+    }
+
+    public static void disableClipArtButton(@NonNull ImageView view) {
+        view.setColorFilter(0xFFAAAAAA, PorterDuff.Mode.MULTIPLY);
         view.setEnabled(false);
     }
 }

@@ -39,7 +39,7 @@
         <activity
             android:name=".ui.activities.CheckoutActivity"
             android:exported="true"
-            android:launchMode="singleTop">
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -58,13 +58,10 @@
             android:name=".ui.activities.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.OrderDetailsActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.activities.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.ProductDetailActivity"
+            android:name=".ui.activities.ProductDetailsActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activities.ProductListActivity"
@@ -77,7 +74,6 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

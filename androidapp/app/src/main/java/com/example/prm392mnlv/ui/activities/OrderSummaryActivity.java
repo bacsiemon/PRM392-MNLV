@@ -1,6 +1,7 @@
 package com.example.prm392mnlv.ui.activities;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -36,7 +37,6 @@ public class OrderSummaryActivity extends AppCompatActivity {
             assert orderTotal != null;
             assert paymentMethod != null;
             assert shippingMethod != null;
-            assert shippingMethod.getDeliveryTime() != null;
         } catch (AssertionError e) {
             Log.e(TAG, "Order summary was not provided with proper order data.", e);
             throw new RuntimeException(e);
@@ -50,11 +50,17 @@ public class OrderSummaryActivity extends AppCompatActivity {
         mTvOrderTotal.setText(TextUtils.formatPrice(orderTotal));
         mTvPaymentMethod.setText(paymentMethod.getName());
         mTvShippingMethod.setText(shippingMethod.getName());
-        mTvEstimatedDelivery.setText(shippingMethod.getDeliveryTime().format(DateTimeFormatter.ofPattern("dd MMM yyyy")));
+        if (shippingMethod.getDeliveryTime() != null) {
+            mTvEstimatedDelivery.setText(shippingMethod.getDeliveryTime().format(DateTimeFormatter.ofPattern("dd MMM yyyy")));
+        } else {
+            mTvEstimatedDelivery.setText(R.string.not_available);
+            mTvEstimatedDelivery.setTypeface(null, Typeface.ITALIC);
+        }
 
         findViewById(R.id.btnHome).setOnClickListener(v -> {
             Intent homeIntent = new Intent(OrderSummaryActivity.this, ProductListActivity.class);
             startActivity(homeIntent);
+            finish();
         });
     }
 }
