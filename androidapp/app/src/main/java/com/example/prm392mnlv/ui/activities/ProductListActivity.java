@@ -89,13 +89,13 @@ public class ProductListActivity extends AppCompatActivity {
     }
 
     private void setupMenu() {
-        menuRecyclerView.setLayoutManager(new GridLayoutManager(this, 3)); // 3 cột
+        menuRecyclerView.setLayoutManager(new GridLayoutManager(this, 4));
 
         List<MenuItem> menuList = Arrays.asList(
                 new MenuItem("Cart", R.drawable.ic_cart),
                 new MenuItem("Map", R.drawable.ic_map),
-                new MenuItem("Logout", R.drawable.ic_logout),
-                new MenuItem("Chat", R.drawable.ic_chat)
+                new MenuItem("Chat", R.drawable.ic_chat),
+                new MenuItem("Logout", R.drawable.ic_logout)
         );
 
         MenuAdapter adapter = new MenuAdapter(menuList, this);
